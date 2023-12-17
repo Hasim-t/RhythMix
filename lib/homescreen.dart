@@ -23,13 +23,20 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: Color.fromARGB(232, 5, 122, 247),
+             unselectedItemColor: Colors.black, 
+              selectedItemColor: Color.fromARGB(232, 5, 122, 247),
+              
+              
+              currentIndex: _selectedIndex,
               onTap: _onItemTapped,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              
               items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(icon: Icon(Icons.man_2), label: 'fsd'),
-                BottomNavigationBarItem(icon: Icon(Icons.man_2), label: 'df'),
-                BottomNavigationBarItem(icon: Icon(Icons.abc), label: 'ddf'),
-                BottomNavigationBarItem(icon: Icon(Icons.abc), label: 'df'),
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.queue_music), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.abc), label: ''),
                 
               ]),
         ));
