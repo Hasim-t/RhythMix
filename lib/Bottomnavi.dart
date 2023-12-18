@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rhythmix/Home.dart';
+import 'package:rhythmix/account.dart';
+import 'package:rhythmix/library.dart';
+import 'package:rhythmix/search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,6 +13,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  List _pages=[
+    Home(),
+    Search(),
+    Library(),
+    Account()
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Color.fromARGB(255, 255, 255, 255)
             ])),
         child: Scaffold(
+          body:_pages[_selectedIndex],
           backgroundColor: Colors.transparent,
           bottomNavigationBar: BottomNavigationBar(
              unselectedItemColor: Colors.black, 
@@ -36,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
                 BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
                 BottomNavigationBarItem(icon: Icon(Icons.queue_music), label: ''),
-                BottomNavigationBarItem(icon: Icon(Icons.abc), label: ''),
+                BottomNavigationBarItem(icon: Icon(Icons.person_outlined), label: ''),
                 
               ]),
         ));
