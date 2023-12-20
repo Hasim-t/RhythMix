@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:rhythmix/nowPlaying.dart';
+import 'package:rhythmix/provider/songprovider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -94,16 +96,24 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.all(5),
                         child: ListTile(
                           onTap: () {
-                            playsong(item.data![index].uri);
+                            context
+                                .read<songModelprovider>()
+                                .setId(item.data![index].id);
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
-                              return NowPlaying();
-                              
+                              return NowPlaying(
+                                songModel: item.data![index],
+                                audioPlayer: _audioplayer,
+                              );
                             }));
                           },
                           title: Text(item.data![index].displayNameWOExt),
                           subtitle: Text('${item.data![index].artist}'),
-                          leading: Icon(Icons.music_note),
+                          leading: QueryArtworkWidget(
+                            id: item.data![index].id,
+                            type: ArtworkType.AUDIO,
+                            nullArtworkWidget: Icon(Icons.music_note),
+                          ),
                           trailing: SizedBox(
                             width: 60,
                             child: Row(

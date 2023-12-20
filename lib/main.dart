@@ -1,8 +1,14 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rhythmix/provider/songprovider.dart';
 import 'package:rhythmix/splash.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(create: (context)=>songModelprovider(),
+  child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,7 +19,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Rhythmix',
-      home: SplashScreen() ,
+      home: SplashScreen(),
     );
   }
 }
