@@ -1,13 +1,18 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
+import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:rhythmix/splash.dart';
 
-void main() {
-  runApp(ChangeNotifierProvider(create: (context)=>songModelprovider(),
-  child: const MyApp(),
+Future<void> main() async {
+  await Hive.initFlutter();
+  if (!Hive.isAdapterRegistered(MusicModelAdapter().typeId)) {
+    Hive.registerAdapter(MusicModelAdapter());
+  }
+  runApp(ChangeNotifierProvider(
+    create: (context) => songModelprovider(),
+    child: const MyApp(),
   ));
 }
 

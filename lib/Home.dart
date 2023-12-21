@@ -3,8 +3,11 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:rhythmix/database/function/db_function.dart';
 import 'package:rhythmix/nowPlaying.dart';
 import 'package:rhythmix/provider/songprovider.dart';
+
+final audioplayer = AudioPlayer();
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -25,11 +28,22 @@ class _HomeState extends State<Home> {
   }
 
   final _audioQuert = OnAudioQuery();
-  final _audioplayer = AudioPlayer();
+
+  Future<List<SongModel>> fechsong() async {
+    List<SongModel> songlist = await _audioQuert.querySongs(
+      sortType: null,
+      orderType: OrderType.ASC_OR_SMALLER,
+      uriType: UriType.EXTERNAL,
+      ignoreCase: true,
+    );
+    addSongtodb(song: songlist);
+    return songlist;
+  }
+
   playsong(String? uri) {
     try {
-      _audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
-      _audioplayer.play();
+      audioplayer.setAudioSource(AudioSource.uri(Uri.parse(uri!)));
+      audioplayer.play();
     } on Exception {
       print('error');
     }
@@ -77,12 +91,7 @@ class _HomeState extends State<Home> {
             ),
             Expanded(
               child: FutureBuilder<List<SongModel>>(
-                future: _audioQuert.querySongs(
-                  sortType: null,
-                  orderType: OrderType.ASC_OR_SMALLER,
-                  uriType: UriType.EXTERNAL,
-                  ignoreCase: true,
-                ),
+                future: fechsong(),
                 builder: (context, item) {
                   if (item.data == null) {
                     return Center(child: CircularProgressIndicator());
@@ -103,7 +112,7 @@ class _HomeState extends State<Home> {
                                 .push(MaterialPageRoute(builder: (context) {
                               return NowPlaying(
                                 songModel: item.data![index],
-                                audioPlayer: _audioplayer,
+                                audioPlayer: audioplayer,
                               );
                             }));
                           },
@@ -119,9 +128,7 @@ class _HomeState extends State<Home> {
                             child: Row(
                               children: [
                                 InkWell(
-                                    onTap: () {
-                                      playsong(item.data![index].uri);
-                                    },
+                                    onTap: () {},
                                     child: Icon(
                                       Icons.play_arrow,
                                     )),
