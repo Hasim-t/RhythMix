@@ -77,18 +77,20 @@ class _HomeState extends State<Home> {
                 Text("RhythMix", style: TextStyle(fontSize: 23)),
               ],
             ),
-            Padding(
-              padding: padding,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(13)),
-                ),
-                height: screenHeight * 0.20,
-                width: screenWidth * 0.50,
-                child: Icon(Icons.music_note),
-              ),
-            ),
+           Padding(
+  padding: padding,
+  child: Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(13)),
+    ),
+    height: screenHeight * 0.20,
+    width: screenWidth * 0.50,
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(13),
+      child: Image.asset('asset/sampleimage.jpg', fit: BoxFit.cover),
+    ),
+  ),
+),
             Expanded(
               child: FutureBuilder<List<SongModel>>(
                 future: fechsong(),
@@ -103,41 +105,47 @@ class _HomeState extends State<Home> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.all(5),
-                        child: ListTile(
-                          onTap: () {
-                            context
-                                .read<songModelprovider>()
-                                .setId(item.data![index].id);
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return NowPlaying(
-                                songModel: item.data![index],
-                                audioPlayer: audioplayer,
-                              );
-                            }));
-                          },
-                          title: Text(item.data![index].displayNameWOExt),
-                          subtitle: Text('${item.data![index].artist}'),
-                          leading: QueryArtworkWidget(
-                            id: item.data![index].id,
-                            type: ArtworkType.AUDIO,
-                            nullArtworkWidget: Icon(Icons.music_note),
-                          ),
-                          trailing: SizedBox(
-                            width: 60,
-                            child: Row(
-                              children: [
-                                InkWell(
-                                    onTap: () {},
-                                    child: Icon(
-                                      Icons.play_arrow,
-                                    )),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
-                                InkWell(
-                                    onTap: () {}, child: Icon(Icons.more_vert)),
-                              ],
+                        child: Container(
+                           decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color.fromARGB(130, 53, 102, 186),
+                      ),
+                          child: ListTile(
+                            onTap: () {
+                              context
+                                  .read<songModelprovider>()
+                                  .setId(item.data![index].id);
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return NowPlaying(
+                                  songModel: item.data![index],
+                                  audioPlayer: audioplayer,
+                                );
+                              }));
+                            },
+                            title: Text(item.data![index].displayNameWOExt),
+                            subtitle: Text('${item.data![index].artist}'),
+                            leading: QueryArtworkWidget(
+                              id: item.data![index].id,
+                              type: ArtworkType.AUDIO,
+                              nullArtworkWidget: Icon(Icons.music_note),
+                            ),
+                            trailing: SizedBox(
+                              width: 60,
+                              child: Row(
+                                children: [
+                                  InkWell(
+                                      onTap: () {},
+                                      child: Icon(
+                                        Icons.play_arrow,
+                                      )),
+                                  SizedBox(
+                                    width: screenWidth * 0.03,
+                                  ),
+                                  InkWell(
+                                      onTap: () {}, child: Icon(Icons.more_vert)),
+                                ],
+                              ),
                             ),
                           ),
                         ),

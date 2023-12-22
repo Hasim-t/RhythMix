@@ -74,6 +74,12 @@ flutter:
   assets:
     - asset/splash screen.png
     - asset/musicapp logo.png
+    - asset/sampleimage.jpg
+    - asset/policy.jpg
+    - asset/rate.jpg
+    - asset/
+    -
+    -
     #   - images/a_dot_burr.jpeg
     #   - images/a_dot_ham.jpeg
     # An image asset can refer to one or more resolution-specific "variants", see

@@ -13,6 +13,8 @@ class _LibraryState extends State<Library> {
     {'name': 'Recent play', 'icon': Icons.access_time},
   ];
 
+  GlobalKey<_LibraryState> libraryKey = GlobalKey<_LibraryState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +23,7 @@ class _LibraryState extends State<Library> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GridView.builder(
+            key: libraryKey,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 8.0,
@@ -48,31 +51,30 @@ class _LibraryState extends State<Library> {
                 );
               } else {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color.fromARGB(130, 53, 102, 186),
-                      ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        if (items[index]['icon'] != null)
-                         Padding(
-                           padding: const EdgeInsets.all(8.0),
-                           child: Text(items[index]['name'], style: TextStyle(fontSize: 20)),
-                         ),
-                        
-                        SizedBox(height: 40.0),
-                       Padding(
-                         padding: const EdgeInsets.all(8.0),
-                         child: Icon(items[index]['icon'], size: 40),
-                       ),
-                      ],
-                    ),
-                  ),
-                );
+  padding: const EdgeInsets.all(8.0),
+  child: Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      color: Color.fromARGB(130, 53, 102, 186),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(items[index]['name'], style: TextStyle(fontSize: 20)),
+        ),
+        if (items[index]['icon'] != null)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(items[index]['icon'], size: 40),
+          ),
+      ],
+    ),
+  ),
+);
+
               }
             },
           ),
@@ -88,13 +90,13 @@ class _LibraryState extends State<Library> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add New Item'),
+          title: Text('Add Playlist'),
           content: TextField(
             onChanged: (value) {
               newItemName = value;
             },
             decoration: InputDecoration(
-              hintText: 'Enter play list name',
+              hintText: 'Enter playlist name',
             ),
           ),
           actions: [
@@ -110,6 +112,8 @@ class _LibraryState extends State<Library> {
                   setState(() {
                     items.add({'name': newItemName});
                   });
+       
+                  libraryKey.currentState?.setState(() {});
                 }
                 Navigator.pop(context);
               },
