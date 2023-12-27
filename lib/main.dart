@@ -3,7 +3,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
-import 'package:rhythmix/splash.dart';
+import 'package:rhythmix/screens/splash.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();

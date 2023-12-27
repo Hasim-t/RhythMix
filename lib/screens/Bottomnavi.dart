@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rhythmix/Home.dart';
-import 'package:rhythmix/account.dart';
-import 'package:rhythmix/library.dart';
-import 'package:rhythmix/search.dart';
+import 'package:rhythmix/screens/Home.dart';
+import 'package:rhythmix/screens/account.dart';
+import 'package:rhythmix/screens/library.dart';
+import 'package:rhythmix/screens/search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
