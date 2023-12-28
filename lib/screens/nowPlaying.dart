@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
+import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 class NowPlaying extends StatefulWidget {
   const NowPlaying(
       {super.key, required this.songModel, required this.audioPlayer});
-  final SongModel songModel;
+  final MusicModel songModel;
   final AudioPlayer audioPlayer;
   @override
   State<NowPlaying> createState() => _NowPlayingState();
@@ -28,7 +29,7 @@ class _NowPlayingState extends State<NowPlaying> {
   void playsong() {
     try {
       widget.audioPlayer
-          .setAudioSource(AudioSource.uri(Uri.parse(widget.songModel.uri!)));
+          .setAudioSource(AudioSource.uri(Uri.parse(widget.songModel.uri)));
       widget.audioPlayer.play();
       _isplaying = true;
     } on Exception {
@@ -58,7 +59,7 @@ class _NowPlayingState extends State<NowPlaying> {
               end: Alignment.bottomCenter,
               colors: [
             Color.fromARGB(232, 5, 122, 247),
-            Color.fromARGB(255, 255, 255, 255)
+            Color.fromARGB(255, 255, 255, 255),
           ])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -80,8 +81,7 @@ class _NowPlayingState extends State<NowPlaying> {
                   height: screenHeight * 0.04,
                 ),
                 Container(
-                 
-                  height: screenHeight * 0.3,
+                  height: screenHeight * 0.4,
                   width: screenWidth * 0.9,
                   child: const Artworkwidget(),
                 ),
@@ -89,7 +89,7 @@ class _NowPlayingState extends State<NowPlaying> {
                   height: screenHeight * 0.02,
                 ),
                 Text(
-                  widget.songModel.displayNameWOExt,
+                  widget.songModel.songname,
                   style: TextStyle(fontSize: 35),
                   overflow:TextOverflow.fade,
                   maxLines: 1,
@@ -98,13 +98,18 @@ class _NowPlayingState extends State<NowPlaying> {
                   height: screenHeight * 0.01,
                 ),
                 Text(
-                  'artist',
+                  widget.songModel.artrist.toString(),
                   style: TextStyle(fontSize: 23),
                 ),
                 SizedBox(
-                  height: screenHeight * 0.1,
+                  height: screenHeight * 0.0,
                 ),
-              TextButton(onPressed: (){}, child:Text('Lyrics',style:GoogleFonts.lato())),
+                //Lyrics
+              TextButton(onPressed: (){}, child:Text('Lyrics',style:GoogleFonts.archivo(
+                textStyle: TextStyle(
+                  color: Colors.white
+                )
+              ))),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -201,28 +206,25 @@ class _NowPlayingState extends State<NowPlaying> {
       ),
     );
   }
-
   void changedtoseconds(int second) {
     Duration duration = Duration(seconds: second);
     widget.audioPlayer.seek(duration);
   }
 }
-
 class Artworkwidget extends StatelessWidget {
   const Artworkwidget({
     Key? key,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(15),
       child: QueryArtworkWidget(
         id: context.watch<songModelprovider>().id,
         type: ArtworkType.AUDIO,
         artworkFit: BoxFit.cover,
+        nullArtworkWidget: Image.asset('asset/the black boy.jpeg'),
       ),
     );
   }
 }
-
