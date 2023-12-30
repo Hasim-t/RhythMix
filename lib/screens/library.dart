@@ -17,11 +17,13 @@ class _LibraryState extends State<Library> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding:  EdgeInsets.all(screenWidth*0.05),
           child: GridView.builder(
             key: libraryKey,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

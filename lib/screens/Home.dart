@@ -4,7 +4,9 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythmix/database/function/db_function.dart';
+import 'package:rhythmix/database/function/functions.dart';
 import 'package:rhythmix/database/model/db_model.dart';
+import 'package:rhythmix/screens/allsongs.dart';
 import 'package:rhythmix/screens/nowPlaying.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -94,7 +96,14 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.view_headline_sharp)),
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return All_Songs();
+                  }));
+                },
+                icon: Icon(Icons.view_headline_sharp)),
             Expanded(
               child: FutureBuilder<List<MusicModel>>(
                 future: fechsong(),
@@ -131,17 +140,23 @@ class _HomeState extends State<Home> {
                               }));
                             },
                             title: TextScroll(item.data![index].songname),
-                            subtitle: TextScroll('${item.data![index].artrist}'),
+                            subtitle:
+                                TextScroll('${item.data![index].artrist}'),
                             leading: QueryArtworkWidget(
                               id: item.data![index].songid,
                               type: ArtworkType.AUDIO,
-                              nullArtworkWidget:ClipRRect(child: Image.asset('asset/the black boy.jpeg'),borderRadius: BorderRadius.circular(30),),
+                              nullArtworkWidget: ClipRRect(
+                                child: Image.asset('asset/the black boy.jpeg'),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
                             ),
-                            trailing: 
-                                InkWell(
-                                    onTap: () {},
-                                    child: Icon(Icons.more_vert)),
-                            
+                            trailing: InkWell(
+                                onTap: () {
+                                  bottomsheet(context);
+                                },
+                                child: Icon(
+                                  Icons.more_vert,
+                                )),
                           ),
                         ),
                       );

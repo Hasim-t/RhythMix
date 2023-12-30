@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 class NowPlaying extends StatefulWidget {
   const NowPlaying(
       {super.key, required this.songModel, required this.audioPlayer});
@@ -100,6 +101,9 @@ class _NowPlayingState extends State<NowPlaying> {
                 Text(
                   widget.songModel.artrist.toString(),
                   style: TextStyle(fontSize: 23),
+                  overflow: TextOverflow.fade,
+                  maxLines: 1
+                  ,
                 ),
                 SizedBox(
                   height: screenHeight * 0.0,
