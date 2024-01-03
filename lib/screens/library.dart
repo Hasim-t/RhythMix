@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rhythmix/screens/FavoritePage.dart';
+import 'package:rhythmix/screens/RecentlyPlayedP.dart';
 
 class Library extends StatefulWidget {
   const Library({Key? key}) : super(key: key);
@@ -9,8 +11,8 @@ class Library extends StatefulWidget {
 
 class _LibraryState extends State<Library> {
   List<Map<String, dynamic>> items = [
-    {'name': 'Favorite', 'icon': Icons.favorite},
-    {'name': 'Recent play', 'icon': Icons.access_time},
+    {'name': 'Favorite', 'image': 'asset/favarite icon.png'},
+    {'name': 'Recent play', 'image': 'asset/recently1.png'},
   ];
 
   GlobalKey<_LibraryState> libraryKey = GlobalKey<_LibraryState>();
@@ -18,12 +20,12 @@ class _LibraryState extends State<Library> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Padding(
-          padding:  EdgeInsets.all(screenWidth*0.05),
+          padding: EdgeInsets.all(screenWidth * 0.05),
           child: GridView.builder(
             key: libraryKey,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -52,31 +54,36 @@ class _LibraryState extends State<Library> {
                   ),
                 );
               } else {
-                return Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20),
-      color: Color.fromARGB(130, 53, 102, 186),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(items[index]['name'], style: TextStyle(fontSize: 20)),
-        ),
-        if (items[index]['icon'] != null)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(items[index]['icon'], size: 40),
-          ),
-      ],
-    ),
-  ),
-);
-
+                return InkWell(
+                  onTap: () {
+                    if (items[index]['name'] == 'Favorite') {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return FavoritePage();
+                      }));
+                    } else {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return RecetlyPlayed();
+                      }));
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color.fromARGB(130, 53, 102, 186),
+                      ),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            items[index]['image'],
+                            fit: BoxFit.fill,
+                          )),
+                    ),
+                  ),
+                );
               }
             },
           ),
@@ -112,9 +119,12 @@ class _LibraryState extends State<Library> {
               onPressed: () {
                 if (newItemName.isNotEmpty) {
                   setState(() {
-                    items.add({'name': newItemName});
+                    items.add({
+                      'name': newItemName,
+                      'image': 'asset/recorder.jpg',
+                    });
                   });
-       
+
                   libraryKey.currentState?.setState(() {});
                 }
                 Navigator.pop(context);

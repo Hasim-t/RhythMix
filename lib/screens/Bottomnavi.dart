@@ -57,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         IconButton(onPressed: (){}, icon: Icon(Icons.skip_previous)),
                         IconButton(onPressed: (){}, icon: Icon(Icons.pause_outlined)),
                         IconButton(onPressed: (){}, icon: Icon(Icons.skip_next)),
-                        
                         ],
                       ),
                     ),

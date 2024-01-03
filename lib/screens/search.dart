@@ -18,9 +18,14 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   Future<List<MusicModel>> searchsong = getAllSongs();
+
   Future<List<MusicModel>> foundsong = Future.value([]);
 
-  
+  @override
+  void initState() {
+    foundsong = searchsong;
+    super.initState();
+  }
 
   void runfilter(String enteredKeyword) async {
     List<MusicModel> result = [];
@@ -29,8 +34,9 @@ class _SearchState extends State<Search> {
       result = await searchsong;
     } else {
       result = (await searchsong)
-          .where((user) =>
-              user.songname.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .where((user) => user.songname
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
           .toList();
     }
 
@@ -107,12 +113,14 @@ class _SearchState extends State<Search> {
                                 );
                               },
                               title: TextScroll(item.data![index].songname),
-                              subtitle: TextScroll('${item.data![index].artrist}'),
+                              subtitle:
+                                  TextScroll('${item.data![index].artrist}'),
                               leading: QueryArtworkWidget(
                                 id: item.data![index].songid,
                                 type: ArtworkType.AUDIO,
                                 nullArtworkWidget: ClipRRect(
-                                  child: Image.asset('asset/the black boy.jpeg'),
+                                  child:
+                                      Image.asset('asset/the black boy.jpeg'),
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                               ),

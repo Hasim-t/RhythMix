@@ -40,6 +40,7 @@ class _HomeState extends State<Home> {
       uriType: UriType.EXTERNAL,
       ignoreCase: true,
     );
+   
     addSongToDb(songs: songlist);
     return getAllSongs();
   }

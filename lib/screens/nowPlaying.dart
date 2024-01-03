@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:marquee_text/marquee_text.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
+import 'package:rhythmix/database/function/db_function.dart';
+import 'package:rhythmix/database/function/functions.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NowPlaying extends StatefulWidget {
-  const NowPlaying(
-      {super.key, required this.songModel, required this.audioPlayer});
+  NowPlaying({
+    super.key,
+    required this.songModel,
+    required this.audioPlayer,
+    
+  });
   final MusicModel songModel;
   final AudioPlayer audioPlayer;
+  
+
   @override
   State<NowPlaying> createState() => _NowPlayingState();
 }
@@ -19,12 +28,20 @@ class _NowPlayingState extends State<NowPlaying> {
   Duration _duration = const Duration();
   Duration _position = const Duration();
   bool _isplaying = false;
+  bool _isMounted = false;
+  bool _isfavorite = false;
 
   @override
   void initState() {
-    
     super.initState();
+    _isMounted = true;
     playsong();
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
   }
 
   void playsong() {
@@ -37,15 +54,19 @@ class _NowPlayingState extends State<NowPlaying> {
       print('Error playing song: ');
     }
     widget.audioPlayer.durationStream.listen((d) {
-      setState(() {
-        _duration = d!;
-      });
+      if (_isMounted) {
+        setState(() {
+          _duration = d!;
+        });
+      }
     });
 
     widget.audioPlayer.positionStream.listen((p) {
-      setState(() {
-        _position = p;
-      });
+      if (_isMounted) {
+        setState(() {
+          _position = p;
+        });
+      }
     });
   }
 
@@ -66,7 +87,7 @@ class _NowPlayingState extends State<NowPlaying> {
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(left: 13,right: 13),
+            padding: const EdgeInsets.only(left: 13, right: 13),
             child: Column(
               children: [
                 Row(
@@ -89,37 +110,47 @@ class _NowPlayingState extends State<NowPlaying> {
                 SizedBox(
                   height: screenHeight * 0.02,
                 ),
-                Text(
-                  widget.songModel.songname,
-                  style: TextStyle(fontSize: 35),
-                  overflow:TextOverflow.fade,
-                  maxLines: 1,
+                MarqueeText(
+                  alwaysScroll: true,
+                  speed: 25,
+                  text: TextSpan(
+                    text: widget.songModel.songname,
+                    style: TextStyle(fontSize: 35),
+                  ),
                 ),
+
                 SizedBox(
                   height: screenHeight * 0.01,
                 ),
-                Text(
-                  widget.songModel.artrist.toString(),
-                  style: TextStyle(fontSize: 23),
-                  overflow: TextOverflow.fade,
-                  maxLines: 1
-                  ,
-                ),
+                MarqueeText(
+                    speed: 25,
+                    text: TextSpan(
+                      text: widget.songModel.artrist.toString(),
+                      style: songstextbalck(),
+                    )),
                 SizedBox(
                   height: screenHeight * 0.0,
                 ),
                 //Lyrics
-              TextButton(onPressed: (){}, child:Text('Lyrics',style:GoogleFonts.archivo(
-                textStyle: TextStyle(
-                  color: Colors.white
-                )
-              ))),
+                TextButton(
+                    onPressed: () {},
+                    child: Text('Lyrics',
+                        style: GoogleFonts.archivo(
+                            textStyle: TextStyle(color: Colors.white)))),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.favorite_border),
+                      onPressed: () {
+                        setState(() {
+                          _isfavorite = !_isfavorite;
+                          if (_isfavorite) {
+                            addfavToDB(favsong:[widget.songModel]);
+                          } else {}
+                        });
+                      },
+                      icon: Icon(
+                          _isfavorite ? Icons.favorite : Icons.favorite_border),
                       iconSize: 28,
                     ),
                     IconButton(
@@ -210,11 +241,13 @@ class _NowPlayingState extends State<NowPlaying> {
       ),
     );
   }
+
   void changedtoseconds(int second) {
     Duration duration = Duration(seconds: second);
     widget.audioPlayer.seek(duration);
   }
 }
+
 class Artworkwidget extends StatelessWidget {
   const Artworkwidget({
     Key? key,

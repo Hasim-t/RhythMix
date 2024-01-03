@@ -11,6 +11,15 @@ TextStyle songstext() {
     )
   );
 }
+TextStyle songstextbalck() {
+  return GoogleFonts.archivo(
+    textStyle: TextStyle(
+      fontSize: 23,
+      color:  Color.fromARGB(255, 0, 0, 0) 
+
+    )
+  );
+}
   void bottomsheet(BuildContext context) {
     
    double screenWidth = MediaQuery.of(context).size.width;

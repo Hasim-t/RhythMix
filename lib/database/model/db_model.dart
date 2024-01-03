@@ -1,6 +1,6 @@
-
 import 'package:hive_flutter/adapters.dart';
 part 'db_model.g.dart';
+
 @HiveType(typeId: 1)
 class MusicModel {
   @HiveField(0)
@@ -16,4 +16,12 @@ class MusicModel {
       required this.songid,
       required this.songname,
       required this.uri});
+}
+
+@HiveType(typeId: 2)
+class FavorateSong {
+ @HiveField(0)
+  int likedid;
+
+  FavorateSong({required this.likedid});
 }

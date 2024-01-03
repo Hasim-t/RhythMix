@@ -62,7 +62,7 @@ class _All_SongsState extends State<All_Songs> {
                                     .push(MaterialPageRoute(builder: (context) {
                                   return NowPlaying(
                                     songModel: item.data![index],
-                                    audioPlayer: audioplayer,
+                                    audioPlayer: audioplayer,  
                                   );
                                 }));
                               },
