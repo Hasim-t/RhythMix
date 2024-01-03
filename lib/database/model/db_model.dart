@@ -19,9 +19,9 @@ class MusicModel {
 }
 
 @HiveType(typeId: 2)
-class FavorateSong {
- @HiveField(0)
-  int likedid;
+class FavorateSong extends HiveObject {
+  @HiveField(0)
+   int likedid;
 
   FavorateSong({required this.likedid});
 }

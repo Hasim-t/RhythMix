@@ -153,7 +153,7 @@ class _HomeState extends State<Home> {
                             ),
                             trailing: InkWell(
                                 onTap: () {
-                                  bottomsheet(context);
+                                  bottomsheet(context,item.data![index]);
                                 },
                                 child: Icon(
                                   Icons.more_vert,

@@ -126,7 +126,7 @@ class _SearchState extends State<Search> {
                               ),
                               trailing: InkWell(
                                 onTap: () {
-                                  bottomsheet(context);
+                                  bottomsheet(context, item.data![index]);
                                 },
                                 child: Icon(
                                   Icons.more_vert,

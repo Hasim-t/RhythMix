@@ -59,9 +59,9 @@ class FavorateSongAdapter extends TypeAdapter<FavorateSong> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-     
+
     return FavorateSong(
-      likedid: fields[0] as int,
+      likedid: fields[0] as int, 
     );
   }
 

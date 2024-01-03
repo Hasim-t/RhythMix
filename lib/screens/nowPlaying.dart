@@ -14,11 +14,9 @@ class NowPlaying extends StatefulWidget {
     super.key,
     required this.songModel,
     required this.audioPlayer,
-    
   });
   final MusicModel songModel;
   final AudioPlayer audioPlayer;
-  
 
   @override
   State<NowPlaying> createState() => _NowPlayingState();
@@ -140,24 +138,23 @@ class _NowPlayingState extends State<NowPlaying> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _isfavorite = !_isfavorite;
-                          if (_isfavorite) {
-                            addfavToDB(favsong:[widget.songModel]);
-                          } else {}
-                        });
-                      },
-                      icon: Icon(
-                          _isfavorite ? Icons.favorite : Icons.favorite_border),
-                      iconSize: 28,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.format_list_bulleted_add),
-                      iconSize: 28,
-                    ),
+                    favsongss.contains(widget.songModel.songid)
+                        ? IconButton(
+                            onPressed: () {
+                              removelikedsong(widget.songModel.songid);
+                              iflikedsong();
+                              setState(() {});
+                            },
+                            icon: Icon(Icons.favorite))
+                        : IconButton(
+                            onPressed: () async {
+                              await addfavToDB(widget.songModel.songid);
+                              iflikedsong();
+                              setState(() {
+                                
+                              });
+                            },
+                            icon: Icon(Icons.favorite_border_outlined))
                   ],
                 ),
                 Padding(

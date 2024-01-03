@@ -10,7 +10,6 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(MusicModelAdapter().typeId)) {
     Hive.registerAdapter(MusicModelAdapter());
   }
-  Hive.initFlutter();
   if (!Hive.isAdapterRegistered(FavorateSongAdapter().typeId)) {
     Hive.registerAdapter(FavorateSongAdapter());
   }

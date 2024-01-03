@@ -29,6 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Color.fromARGB(255, 255, 255, 255)
             ])),
         child: Scaffold(
+
+          extendBody: true,
           body: _pages[_selectedIndex],
           backgroundColor: Colors.transparent,
           bottomNavigationBar: Container(
