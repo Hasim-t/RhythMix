@@ -23,81 +23,114 @@ void bottomsheet(BuildContext context, MusicModel item) {
   double screenHeight = MediaQuery.of(context).size.height;
   showModalBottomSheet(
       context: context,
-      builder: (context, ) {
+      builder: (
+        context,
+      ) {
         return Container(
-          height: screenHeight * 0.298,
+          height: screenHeight * 0.285,
           width: screenWidth,
-          color: Colors.black,
-          child: Column(
-            children: [
-              Container(
-                height: screenHeight * 0.08,
-                width: screenWidth,
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.add,
-                      size: 50,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.09,
-                    ),
-                    Text(
-                      'Add Playlist',
-                      style: songstext(),
-                    )
-                  ],
-                ),
-              ),
-              Divider(),
-              InkWell(
-                onTap: () {
-                  addfavToDB(item.songid);
-                },
-                child: Container(
+          color: Colors.transparent,
+          child: Expanded(
+            child: Column(
+              children: [
+                favsongss.contains(item.songid)
+                    ? InkWell(
+                        onTap: () {
+                          removelikedsong(item.songid);
+                          iflikedsong();
+                        },
+                        child: Container(
+                          height: screenHeight * 0.08,
+                          width: screenWidth,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.favorite,
+                                size: 35,
+                                color: Colors.black,
+                              ),
+                              SizedBox(
+                                width: screenWidth * 0.09,
+                              ),
+                              Text(
+                                'Remove from Favorite',
+                                style: songstextbalck(),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () async {
+                          await addfavToDB(item.songid);
+                          iflikedsong();
+                          
+                        },
+                        child: Container(
+                          height: screenHeight * 0.08,
+                          width: screenWidth,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.favorite,
+                                size: 35,
+                                color: Colors.black,
+                              ),
+                              SizedBox(
+                                width: screenWidth * 0.09,
+                              ),
+                              Text(
+                                'Add To Favorite',
+                                style: songstextbalck(),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                Divider(),
+                Container(
                   height: screenHeight * 0.08,
                   width: screenWidth,
                   child: Row(
                     children: [
                       Icon(
-                        Icons.favorite,
-                        size: 35,
-                        color: Colors.white,
+                        Icons.add,
+                        size: 50,
+                        color: Colors.black,
                       ),
                       SizedBox(
                         width: screenWidth * 0.09,
                       ),
                       Text(
-                        'Add To Favorite',
-                        style: songstext(),
+                        'Add Playlist',
+                        style: songstextbalck(),
                       )
                     ],
                   ),
                 ),
-              ),
-              Divider(),
-              Container(
-                height: screenHeight * 0.08,
-                width: screenWidth,
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.add,
-                      size: 50,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.09,
-                    ),
-                    Text(
-                      'Share',
-                      style: songstext(),
-                    )
-                  ],
+                Divider(),
+                Container(
+                  height: screenHeight * 0.08,
+                  width: screenWidth,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.add,
+                        size: 50,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: screenWidth * 0.09,
+                      ),
+                      Text(
+                        'Share',
+                        style: songstextbalck(),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       });

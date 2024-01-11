@@ -68,7 +68,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                     .push(MaterialPageRoute(builder: (context) {
                                   return NowPlaying(
                                     songModel: item.data![index],
-                                    audioPlayer: audioplayer,  
+                                    audioPlayer: audioplayer, playlist:item.data!, currentIndex:index ,  
                                   );
                                 }));
                               },

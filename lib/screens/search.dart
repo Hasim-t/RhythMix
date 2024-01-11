@@ -107,7 +107,7 @@ class _SearchState extends State<Search> {
                                   MaterialPageRoute(builder: (context) {
                                     return NowPlaying(
                                       songModel: item.data![index],
-                                      audioPlayer: audioplayer,
+                                      audioPlayer: audioplayer, playlist:item.data!, currentIndex: index,
                                     );
                                   }),
                                 );

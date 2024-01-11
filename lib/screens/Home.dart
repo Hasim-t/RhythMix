@@ -116,6 +116,7 @@ class _HomeState extends State<Home> {
                     return Text('no song found');
                   }
                   return ListView.builder(
+                    
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
@@ -136,7 +137,8 @@ class _HomeState extends State<Home> {
                                   .push(MaterialPageRoute(builder: (context) {
                                 return NowPlaying(
                                   songModel: item.data![index],
-                                  audioPlayer: audioplayer,
+                                  audioPlayer: audioplayer, playlist:item.data!, currentIndex: index,
+                                  
                                 );
                               }));
                             },

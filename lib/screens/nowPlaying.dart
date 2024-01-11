@@ -9,15 +9,19 @@ import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
 class NowPlaying extends StatefulWidget {
   NowPlaying({
     super.key,
     required this.songModel,
     required this.audioPlayer,
+    required this.playlist,
+    required this.currentIndex,
   });
-  final MusicModel songModel;
+  MusicModel songModel;
   final AudioPlayer audioPlayer;
-
+  List<MusicModel> playlist;
+  int currentIndex;
   @override
   State<NowPlaying> createState() => _NowPlayingState();
 }
@@ -27,7 +31,12 @@ class _NowPlayingState extends State<NowPlaying> {
   Duration _position = const Duration();
   bool _isplaying = false;
   bool _isMounted = false;
-  bool _isfavorite = false;
+  bool _isRepeatMode = false;
+  bool _isShuffleMode = false;
+
+  void updateson(MusicModel newsong) {
+    widget.songModel = newsong;
+  }
 
   @override
   void initState() {
@@ -46,11 +55,16 @@ class _NowPlayingState extends State<NowPlaying> {
     try {
       widget.audioPlayer
           .setAudioSource(AudioSource.uri(Uri.parse(widget.songModel.uri)));
+
+      // Set shuffle mode before playing
+      widget.audioPlayer.setShuffleModeEnabled(_isShuffleMode);
+
       widget.audioPlayer.play();
       _isplaying = true;
     } on Exception {
       print('Error playing song: ');
     }
+
     widget.audioPlayer.durationStream.listen((d) {
       if (_isMounted) {
         setState(() {
@@ -63,6 +77,12 @@ class _NowPlayingState extends State<NowPlaying> {
       if (_isMounted) {
         setState(() {
           _position = p;
+
+          // Check if the song has completed and move to the next song
+          if (_position >= _duration && _duration > Duration.zero) {
+            // Song has completed, go to the next song
+            skipToNextSong();
+          }
         });
       }
     });
@@ -150,9 +170,7 @@ class _NowPlayingState extends State<NowPlaying> {
                             onPressed: () async {
                               await addfavToDB(widget.songModel.songid);
                               iflikedsong();
-                              setState(() {
-                                
-                              });
+                              setState(() {});
                             },
                             icon: Icon(Icons.favorite_border_outlined))
                   ],
@@ -191,12 +209,17 @@ class _NowPlayingState extends State<NowPlaying> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        loopmode();
+                      },
                       icon: Icon(Icons.repeat),
                       iconSize: 32,
+                      color: _isRepeatMode
+                          ? Colors.blue
+                          : null, // Change color based on repeat mode
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: skipToPreviousSong,
                       icon: Icon(Icons.skip_previous_rounded),
                       iconSize: 35,
                     ),
@@ -220,14 +243,19 @@ class _NowPlayingState extends State<NowPlaying> {
                       iconSize: 35,
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: skipToNextSong,
                       icon: Icon(Icons.skip_next_rounded),
                       iconSize: 35,
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        shuffleSongs(); // Call the toggleShuffle method
+                      },
                       icon: Icon(Icons.shuffle),
                       iconSize: 32,
+                      color: _isShuffleMode
+                          ? Colors.blue
+                          : null, // Change color based on shuffle mode
                     ),
                   ],
                 ),
@@ -237,6 +265,88 @@ class _NowPlayingState extends State<NowPlaying> {
         ),
       ),
     );
+  }
+
+  void skipToPreviousSong() {
+    int currentIndex = widget.currentIndex;
+    currentIndex--;
+    if (currentIndex >= 0) {
+      MusicModel previousSong = widget.playlist[currentIndex];
+      setState(() {
+        widget.currentIndex = currentIndex;
+        widget.audioPlayer
+            .setAudioSource(AudioSource.uri(Uri.parse(previousSong.uri)));
+        widget.audioPlayer.play();
+        updateson(previousSong);
+      });
+    } else {
+      
+      currentIndex = widget.playlist.length - 1;
+      MusicModel lastSong = widget.playlist[currentIndex];
+      setState(() {
+        widget.currentIndex = currentIndex;
+        widget.audioPlayer
+            .setAudioSource(AudioSource.uri(Uri.parse(lastSong.uri)));
+        widget.audioPlayer.play();
+        updateson(lastSong);
+      });
+    }
+  }
+
+  void loopmode() {
+    setState(() {
+      _isRepeatMode = !_isRepeatMode;
+      if (_isRepeatMode) {
+        widget.audioPlayer.setLoopMode(LoopMode.one);
+      } else {
+        widget.audioPlayer.setLoopMode(LoopMode.off);
+      }
+    });
+  }
+
+  void skipToNextSong() {
+    int currentIndex = widget.currentIndex;
+    currentIndex++;
+    if (currentIndex < widget.playlist.length) {
+      MusicModel nextSong = widget.playlist[currentIndex];
+      setState(() {
+        widget.currentIndex = currentIndex;
+        widget.audioPlayer
+            .setAudioSource(AudioSource.uri(Uri.parse(nextSong.uri)));
+        widget.audioPlayer.play();
+        updateson(nextSong);
+      });
+    } else {
+      // Handle the end of the playlist (e.g., loop back to the first song)
+    }
+  }
+
+  void shuffleSongs() {
+    setState(() {
+      _isShuffleMode = !_isShuffleMode; // Toggle shuffle mode
+      widget.audioPlayer.setShuffleModeEnabled(_isShuffleMode);
+
+      if (_isShuffleMode) {
+        // If shuffle mode is enabled, shuffle the playlist
+        List<MusicModel> shuffledSongs = List.from(widget.playlist);
+        shuffledSongs.shuffle();
+        widget.playlist = shuffledSongs;
+        widget.currentIndex = widget.playlist.indexOf(widget.songModel);
+
+        // Do not play the song immediately when shuffle mode is enabled
+        // Continue playing the current song
+        // widget.audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(widget.songModel.uri)));
+        // widget.audioPlayer.play();
+      } else {
+        // If shuffle mode is disabled, revert to the original playlist order
+        widget.playlist = List.from(widget.playlist);
+        widget.currentIndex = widget.playlist.indexOf(widget.songModel);
+        widget.audioPlayer
+            .setAudioSource(AudioSource.uri(Uri.parse(widget.songModel.uri)));
+        widget.audioPlayer.play();
+        updateson(widget.songModel);
+      }
+    });
   }
 
   void changedtoseconds(int second) {
