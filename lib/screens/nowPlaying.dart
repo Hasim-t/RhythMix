@@ -10,6 +10,7 @@ import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
+
 class NowPlaying extends StatefulWidget {
   NowPlaying({
     super.key,
@@ -35,8 +36,17 @@ class _NowPlayingState extends State<NowPlaying> {
   bool _isShuffleMode = false;
 
   void updateson(MusicModel newsong) {
-    widget.songModel = newsong;
-  }
+  widget.songModel = newsong;
+
+  // Use context.read to directly access the provider value
+  final songModelProvider = context.read<songModelprovider>();
+
+  // Update the ID and notify listeners
+  songModelProvider.setId(newsong.songid);
+
+  setState(() {});
+}
+
 
   @override
   void initState() {
@@ -249,13 +259,13 @@ class _NowPlayingState extends State<NowPlaying> {
                     ),
                     IconButton(
                       onPressed: () {
-                        shuffleSongs(); // Call the toggleShuffle method
+                        shuffleSongs(); 
                       },
                       icon: Icon(Icons.shuffle),
                       iconSize: 32,
                       color: _isShuffleMode
                           ? Colors.blue
-                          : null, // Change color based on shuffle mode
+                          : null, 
                     ),
                   ],
                 ),
@@ -317,28 +327,26 @@ class _NowPlayingState extends State<NowPlaying> {
         updateson(nextSong);
       });
     } else {
-      // Handle the end of the playlist (e.g., loop back to the first song)
+      
     }
   }
 
   void shuffleSongs() {
     setState(() {
-      _isShuffleMode = !_isShuffleMode; // Toggle shuffle mode
+      _isShuffleMode = !_isShuffleMode; 
       widget.audioPlayer.setShuffleModeEnabled(_isShuffleMode);
 
       if (_isShuffleMode) {
-        // If shuffle mode is enabled, shuffle the playlist
+       
         List<MusicModel> shuffledSongs = List.from(widget.playlist);
         shuffledSongs.shuffle();
         widget.playlist = shuffledSongs;
         widget.currentIndex = widget.playlist.indexOf(widget.songModel);
 
-        // Do not play the song immediately when shuffle mode is enabled
-        // Continue playing the current song
-        // widget.audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(widget.songModel.uri)));
-        // widget.audioPlayer.play();
+        
+     
       } else {
-        // If shuffle mode is disabled, revert to the original playlist order
+        
         widget.playlist = List.from(widget.playlist);
         widget.currentIndex = widget.playlist.indexOf(widget.songModel);
         widget.audioPlayer
@@ -359,11 +367,14 @@ class Artworkwidget extends StatelessWidget {
   const Artworkwidget({
     Key? key,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    print('Building Artworkwidget for song ID: ${context.watch<songModelprovider>().id}');
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: QueryArtworkWidget(
+        key: Key(context.watch<songModelprovider>().id.toString()),
         id: context.watch<songModelprovider>().id,
         type: ArtworkType.AUDIO,
         artworkFit: BoxFit.cover,

@@ -3,7 +3,7 @@ import 'package:rhythmix/screens/Home.dart';
 import 'package:rhythmix/screens/account.dart';
 import 'package:rhythmix/screens/library.dart';
 import 'package:rhythmix/screens/search.dart';
-import 'package:text_scroll/text_scroll.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,8 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List _pages = [Home(), Search(), Library(), Account()];
   @override
   Widget build(BuildContext context) {
-     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    //  double screenWidth = MediaQuery.of(context).size.width;
+    // double screenHeight = MediaQuery.of(context).size.height;
     return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -38,32 +38,32 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                Padding(
-                  padding:  EdgeInsets.only(bottom:screenHeight*0.07),
+                // Padding(
+                //   padding:  EdgeInsets.only(bottom:screenHeight*0.07),
                    
-                  child: Container(
-                    height: screenHeight*0.09,
-                    width:screenWidth ,
-                   decoration: BoxDecoration(
+                //   child: Container(
+                //     height: screenHeight*0.09,
+                //     width:screenWidth ,
+                //    decoration: BoxDecoration(
                  
-                    color: Colors.blue[200],
+                //     color: Colors.blue[200],
                    
-                   ),
-                    child:ListTile(
-                      leading: Icon(Icons.abc),
-                      title: TextScroll('song'),
-                      subtitle: TextScroll('artist'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                        IconButton(onPressed: (){}, icon: Icon(Icons.skip_previous)),
-                        IconButton(onPressed: (){}, icon: Icon(Icons.pause_outlined)),
-                        IconButton(onPressed: (){}, icon: Icon(Icons.skip_next)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                //    ),
+                //     child:ListTile(
+                //       leading: Icon(Icons.abc),
+                //       title: TextScroll('song'),
+                //       subtitle: TextScroll('artist'),
+                //       trailing: Row(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //         IconButton(onPressed: (){}, icon: Icon(Icons.skip_previous)),
+                //         IconButton(onPressed: (){}, icon: Icon(Icons.pause_outlined)),
+                //         IconButton(onPressed: (){}, icon: Icon(Icons.skip_next)),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 BottomNavigationBar(
                   
                   backgroundColor: Colors.transparent,
@@ -87,7 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ));
   }
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
