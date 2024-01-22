@@ -3,14 +3,14 @@ import 'package:just_audio/just_audio.dart';
 import 'package:marquee_text/marquee_text.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
-import 'package:rhythmix/database/function/db_function.dart';
+
+import 'package:rhythmix/database/function/favorite_db.dart';
 import 'package:rhythmix/database/function/functions.dart';
+import 'package:rhythmix/database/function/recently.dart';
+
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
-
 
 // ignore: must_be_immutable
 class NowPlaying extends StatefulWidget {
@@ -38,21 +38,21 @@ class _NowPlayingState extends State<NowPlaying> {
   bool _isShuffleMode = false;
 
   void updateson(MusicModel newsong) {
-  widget.songModel = newsong;
+    widget.songModel = newsong;
 
-  // Use context.read to directly access the provider value
-  final songModelProvider = context.read<songModelprovider>();
+    // Use context.read to directly access the provider value
+    final songModelProvider = context.read<songModelprovider>();
 
-  // Update the ID and notify listeners
-  songModelProvider.setId(newsong.songid);
+    // Update the ID and notify listeners
+    songModelProvider.setId(newsong.songid);
 
-  setState(() {});
-}
-
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
+    addrecently(widget.songModel.songid);
     _isMounted = true;
     playsong();
   }
@@ -148,7 +148,6 @@ class _NowPlayingState extends State<NowPlaying> {
                     style: TextStyle(fontSize: 35),
                   ),
                 ),
-
                 SizedBox(
                   height: screenHeight * 0.01,
                 ),
@@ -261,13 +260,11 @@ class _NowPlayingState extends State<NowPlaying> {
                     ),
                     IconButton(
                       onPressed: () {
-                        shuffleSongs(); 
+                        shuffleSongs();
                       },
                       icon: Icon(Icons.shuffle),
                       iconSize: 32,
-                      color: _isShuffleMode
-                          ? Colors.blue
-                          : null, 
+                      color: _isShuffleMode ? Colors.blue : null,
                     ),
                   ],
                 ),
@@ -292,7 +289,6 @@ class _NowPlayingState extends State<NowPlaying> {
         updateson(previousSong);
       });
     } else {
-      
       currentIndex = widget.playlist.length - 1;
       MusicModel lastSong = widget.playlist[currentIndex];
       setState(() {
@@ -328,27 +324,20 @@ class _NowPlayingState extends State<NowPlaying> {
         widget.audioPlayer.play();
         updateson(nextSong);
       });
-    } else {
-      
-    }
+    } else {}
   }
 
   void shuffleSongs() {
     setState(() {
-      _isShuffleMode = !_isShuffleMode; 
+      _isShuffleMode = !_isShuffleMode;
       widget.audioPlayer.setShuffleModeEnabled(_isShuffleMode);
 
       if (_isShuffleMode) {
-       
         List<MusicModel> shuffledSongs = List.from(widget.playlist);
         shuffledSongs.shuffle();
         widget.playlist = shuffledSongs;
         widget.currentIndex = widget.playlist.indexOf(widget.songModel);
-
-        
-     
       } else {
-        
         widget.playlist = List.from(widget.playlist);
         widget.currentIndex = widget.playlist.indexOf(widget.songModel);
         widget.audioPlayer
@@ -372,7 +361,8 @@ class Artworkwidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Building Artworkwidget for song ID: ${context.watch<songModelprovider>().id}');
+    print(
+        'Building Artworkwidget for song ID: ${context.watch<songModelprovider>().id}');
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: QueryArtworkWidget(

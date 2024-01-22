@@ -13,6 +13,9 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(FavorateSongAdapter().typeId)) {
     Hive.registerAdapter(FavorateSongAdapter());
   }
+  if (!Hive.isAdapterRegistered(RecentlyAdapter().typeId)) {
+    Hive.registerAdapter(RecentlyAdapter());
+  }
   runApp(ChangeNotifierProvider(
     create: (context) => songModelprovider(),
     child: const MyApp(),

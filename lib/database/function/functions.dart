@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rhythmix/database/function/db_function.dart';
+import 'package:rhythmix/database/function/favorite_db.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 
 TextStyle songstext() {

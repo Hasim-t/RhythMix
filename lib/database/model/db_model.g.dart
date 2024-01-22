@@ -59,9 +59,8 @@ class FavorateSongAdapter extends TypeAdapter<FavorateSong> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-
     return FavorateSong(
-      likedid: fields[0] as int, 
+      likedid: fields[0] as int,
     );
   }
 
@@ -80,6 +79,40 @@ class FavorateSongAdapter extends TypeAdapter<FavorateSong> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is FavorateSongAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class RecentlyAdapter extends TypeAdapter<Recently> {
+  @override
+  final int typeId = 3;
+
+  @override
+  Recently read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Recently(
+      recentid: fields[0] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Recently obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.recentid);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RecentlyAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
