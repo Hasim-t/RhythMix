@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rhythmix/screens/FavoritePage.dart';
-import 'package:rhythmix/screens/RecentlyPlayedP.dart';
+import 'package:rhythmix/screens/favorite_page.dart';
+import 'package:rhythmix/screens/recetly_played.dart';
 
 class Library extends StatefulWidget {
   const Library({Key? key}) : super(key: key);

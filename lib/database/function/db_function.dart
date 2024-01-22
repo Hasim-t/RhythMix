@@ -29,6 +29,10 @@ Future<List<MusicModel>> getAllSongs() async {
   return songs;
 }
 
+
+//Fav
+
+
 Future<void> addfavToDB(int favid) async {
   final favsongDB = await Hive.openBox<FavorateSong>('Fav');
   final likedsong = FavorateSong(likedid: favid);

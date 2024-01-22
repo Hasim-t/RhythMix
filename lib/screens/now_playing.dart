@@ -11,6 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 
+
+// ignore: must_be_immutable
 class NowPlaying extends StatefulWidget {
   NowPlaying({
     super.key,

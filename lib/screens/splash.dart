@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rhythmix/screens/Bottomnavi.dart';
+import 'package:rhythmix/screens/bottamnavigation.dart';
+
 
 
 class SplashScreen extends StatefulWidget {

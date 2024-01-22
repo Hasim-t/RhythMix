@@ -7,8 +7,9 @@ import 'package:rhythmix/database/function/db_function.dart';
 import 'package:rhythmix/database/function/functions.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/screens/allsongs.dart';
-import 'package:rhythmix/screens/nowPlaying.dart';
+
 import 'package:rhythmix/provider/songprovider.dart';
+import 'package:rhythmix/screens/now_playing.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 final audioplayer = AudioPlayer();
