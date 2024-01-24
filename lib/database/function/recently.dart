@@ -14,7 +14,6 @@ Future<List<MusicModel>> showrecenty() async {
   final recentDB = await Hive.openBox<Recently>('recently');
   List<Recently> showrec = recentDB.values.toList();
 
- 
   List<MusicModel> musicModelsList = await getAllSongs();
 
   List<MusicModel> convertedList = showrec.map((recently) {
@@ -24,8 +23,16 @@ Future<List<MusicModel>> showrecenty() async {
     return associatedMusicModel;
   }).toList();
 
-  
   convertedList = convertedList.reversed.toSet().toList();
 
   return convertedList;
+}
+
+Future<void> clearRecetly(int songid) async {
+  final recentDB = await Hive.openBox<Recently>('recently');
+  for (Recently element in recentDB.values.toList()) {
+    if (songid == element.recentid) {
+      recentDB.delete(element.key);
+    }
+  }
 }

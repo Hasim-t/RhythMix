@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    EdgeInsetsGeometry padding = EdgeInsets.all(screenWidth * 0.05);
+    
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -84,17 +84,17 @@ class _HomeState extends State<Home> {
               ],
             ),
             Padding(
-              padding: padding,
+              padding: EdgeInsets.only(right: screenWidth*0.001,left:screenWidth*0.01,top: screenHeight*0.01 ),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(13)),
                 ),
-                height: screenHeight * 0.18,
-                width: screenWidth * 0.50,
+                height: screenHeight * 0.20,
+                width: screenWidth * 0.88,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(13),
                   child:
-                      Image.asset('asset/sampleimage.jpg', fit: BoxFit.cover),
+                      Image.asset('asset/homepage.jpeg', fit: BoxFit.cover),
                 ),
               ),
             ),

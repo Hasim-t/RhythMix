@@ -19,9 +19,9 @@ class RecetlyPlayed extends StatefulWidget {
 class _RecetlyPlayedState extends State<RecetlyPlayed> {
   @override
   Widget build(BuildContext context) {
-       double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-     return Container(
+    return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -78,11 +78,10 @@ class _RecetlyPlayedState extends State<RecetlyPlayed> {
                               playlist: item.data!,
                               currentIndex: index,
                             );
-                          }))..then((value) {
-                            setState(() {
-                              
+                          }))
+                            ..then((value) {
+                              setState(() {});
                             });
-                          });
                         },
                         title: TextScroll(item.data![index].songname),
                         subtitle: TextScroll('${item.data![index].artrist}'),
@@ -94,7 +93,14 @@ class _RecetlyPlayedState extends State<RecetlyPlayed> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        ),
+                        trailing: InkWell(
+                            onTap: () {
+                              clearRecetly(item.data![index].songid);
+                              setState(() {
+                                
+                              });
+                            },
+                            child: Icon(Icons.close,color: Colors.black,))),
                   ),
                 );
               },

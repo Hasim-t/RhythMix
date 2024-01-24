@@ -11,8 +11,8 @@ import 'package:rhythmix/database/function/recently.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rhythmix/screens/lyrics.dart';
 
-// ignore: must_be_immutable
 class NowPlaying extends StatefulWidget {
   NowPlaying({
     super.key,
@@ -162,10 +162,23 @@ class _NowPlayingState extends State<NowPlaying> {
                 ),
                 //Lyrics
                 TextButton(
-                    onPressed: () {},
-                    child: Text('Lyrics',
-                        style: GoogleFonts.archivo(
-                            textStyle: TextStyle(color: Colors.white)))),
+                  onPressed: () {
+                   Navigator.of(context).push(
+  MaterialPageRoute(builder: (context) {
+    return Lyrics(songId:widget.songModel.songid, songName: widget.songModel.songname,artistName: widget.songModel.artrist,
+      
+    );
+  }),
+);
+
+                  },
+                  child: Text(
+                    'Lyrics',
+                    style: GoogleFonts.archivo(
+                      textStyle: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -374,4 +387,6 @@ class Artworkwidget extends StatelessWidget {
       ),
     );
   }
+
+
 }
