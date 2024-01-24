@@ -84,7 +84,7 @@ class _LyricsState extends State<Lyrics> {
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: loading
-              ? CircularProgressIndicator() // Show loading indicator while fetching lyrics
+              ? CircularProgressIndicator() 
               : Text(
                   lyrics ?? 'Lyrics not found',
                   style: TextStyle(fontSize: 16),
