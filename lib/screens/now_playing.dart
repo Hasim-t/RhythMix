@@ -196,7 +196,8 @@ class _NowPlayingState extends State<NowPlaying> {
                               iflikedsong();
                               setState(() {});
                             },
-                            icon: Icon(Icons.favorite_border_outlined))
+                            icon: Icon(Icons.favorite_border_outlined)),
+                            IconButton(onPressed: (){}, icon:Icon(Icons.format_list_bulleted_add))
                   ],
                 ),
                 Padding(
@@ -339,12 +340,10 @@ class _NowPlayingState extends State<NowPlaying> {
       });
     } else {}
   }
-
   void shuffleSongs() {
     setState(() {
       _isShuffleMode = !_isShuffleMode;
       widget.audioPlayer.setShuffleModeEnabled(_isShuffleMode);
-
       if (_isShuffleMode) {
         List<MusicModel> shuffledSongs = List.from(widget.playlist);
         shuffledSongs.shuffle();
@@ -360,18 +359,15 @@ class _NowPlayingState extends State<NowPlaying> {
       }
     });
   }
-
   void changedtoseconds(int second) {
     Duration duration = Duration(seconds: second);
     widget.audioPlayer.seek(duration);
   }
 }
-
 class Artworkwidget extends StatelessWidget {
   const Artworkwidget({
     Key? key,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     print(
@@ -387,6 +383,4 @@ class Artworkwidget extends StatelessWidget {
       ),
     );
   }
-
-
 }

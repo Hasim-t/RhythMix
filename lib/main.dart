@@ -16,6 +16,9 @@ Future<void> main() async {
   if (!Hive.isAdapterRegistered(RecentlyAdapter().typeId)) {
     Hive.registerAdapter(RecentlyAdapter());
   }
+  if (!Hive.isAdapterRegistered(PlaylistModelAdapter().typeId)) {
+    Hive.registerAdapter(PlaylistModelAdapter());
+  }
   runApp(ChangeNotifierProvider(
     create: (context) => songModelprovider(),
     child: const MyApp(),
@@ -28,7 +31,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      
       debugShowCheckedModeBanner: false,
       title: 'Rhythmix',
       home: SplashScreen(),

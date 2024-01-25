@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rhythmix/playlist.dart';
+import 'package:hive/hive.dart';
+import 'package:rhythmix/database/function/db_playlist.dart';
+import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/screens/favorite_page.dart';
 import 'package:rhythmix/screens/recetly_played.dart';
 
@@ -13,12 +15,32 @@ class Library extends StatefulWidget {
 
 class _LibraryState extends State<Library> {
   List<Map<String, dynamic>> items = [
-    {'name': 'Favorite', 'image': 'asset/favarite icon.png'},
+    {'name': 'Favorite', 'image': 'asset/favariteicon.png'},
     {'name': 'Recently Played', 'image': 'asset/recently1.png'},
   ];
 
   GlobalKey<_LibraryState> libraryKey = GlobalKey<_LibraryState>();
-GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    loadItemsFromHive();
+  }
+
+  Future<void> loadItemsFromHive() async {
+    final playlistBox = await Hive.openBox<PlaylistModel>('playlists');
+    setState(() {
+      // Remove the first two items if already present
+      if (items.length >= 2) {
+        items.removeRange(2, items.length);
+      }
+
+      // Add items from Hive
+      items.addAll(playlistBox.values.map((playlist) {
+        return {'name': playlist.name, 'image': 'asset/playlist.jpeg'};
+      }));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,80 +70,75 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
                   ),
                 ],
               ),
-      Expanded(
-  child: GridView.builder(
-    key: libraryKey,
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      crossAxisSpacing: 8.0,
-      mainAxisSpacing: 8.0,
-    ),
-    itemCount: items.length,
-    itemBuilder: (context, index) {
-      return InkWell(
-        onTap: () {
-         
-          navigateToPage(index+2);
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Color.fromARGB(130, 53, 102, 186),
-            ),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    items[index]['image'],
-                    fit: BoxFit.fill,
+              Expanded(
+                child: GridView.builder(
+                  key: libraryKey,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
                   ),
-                ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: (index >= 2)
-                      ? IconButton(
-                          onPressed: () {
-                            // Handle icon button tap as needed
-                          },
-                          icon: Icon(
-                            Icons.more_vert_rounded,
-                            color: Colors.white,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        navigateToPage(index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Color.fromARGB(130, 53, 102, 186),
                           ),
-                        )
-                      : SizedBox(),
-                ),
-                Positioned.fill(
-                  child: Center(
-                    child: (index >= 2) 
-                        ? Text(
-                            items[index]['name'],
-                            style: GoogleFonts.dancingScript(
-                              textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset(
+                                  items[index]['image'],
+                                  fit: BoxFit.fill,
+                                ),
                               ),
-                            ),
-                          )
-                        : SizedBox(), 
-                  ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: (index >= 2)
+                                    ? IconButton(
+                                        onPressed: () {
+                                          // Handle icon button tap as needed
+                                        },
+                                        icon: Icon(
+                                          Icons.more_vert_rounded,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : SizedBox(),
+                              ),
+                              Positioned.fill(
+                                child: Center(
+                                  child: (index >= 2)
+                                      ? Text(
+                                          items[index]['name'],
+                                          style: GoogleFonts.dancingScript(
+                                            textStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
-          ),
-        ),
-      );
-    },
-  ),
-),
-
-
-
-
+              ),
             ],
           ),
         ),
@@ -153,15 +170,10 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
               child: Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 if (newItemName.isNotEmpty) {
-                  setState(() {
-                    items.add({
-                      'name': newItemName,
-                      'image': 'asset/playlist.jpeg',
-                    });
-                  });
-
+                  await addPlaylistToHive(newItemName);
+                  loadItemsFromHive(); // Reload items from Hive
                   libraryKey.currentState?.setState(() {});
                 }
                 Navigator.pop(context);
@@ -173,27 +185,49 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
       },
     );
   }
-void navigateToPage(int index) {
-  if (index == 2) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) {
-        return FavoritePage();
-      },
-    ));
-  } else if (index == 3) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) {
-        return RecetlyPlayed();
-      },
-    ));
-  } else {
-    // Handle navigation for other items
-    String itemName = items[index-2]['name'];
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) {
-        return OtherPage(itemName: itemName);
-      },
-    ));
+
+  void navigateToPage(int index) {
+    if (index == 0) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return FavoritePage();
+        },
+      ));
+    } else if (index == 1) {
+        Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return RecetlyPlayed();
+        },
+      ));
+    } else {
+      // Handle navigation for other items from Hive
+      String itemName = items[index - 2]['name'];
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return OtherPage(itemName: itemName);
+        },
+      ));
+    }
   }
 }
+
+class OtherPage extends StatelessWidget {
+  final String itemName;
+
+  const OtherPage({Key? key, required this.itemName}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(itemName),
+      ),
+      body: Center(
+        child: Text(
+          'This is the $itemName page',
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+    );
+  }
 }

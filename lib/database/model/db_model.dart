@@ -1,4 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 part 'db_model.g.dart';
 
 @HiveType(typeId: 1)
@@ -25,10 +26,24 @@ class FavorateSong extends HiveObject {
 
   FavorateSong({required this.likedid});
 }
+
 @HiveType(typeId: 3)
 class Recently extends HiveObject {
   @HiveField(0)
   int recentid;
 
   Recently({required this.recentid});
+}
+
+@HiveType(typeId: 4) // Use a different typeId for Playlist
+class PlaylistModel {
+  @HiveField(0)
+  String name;
+  @HiveField(1)
+  List<int> playlistsong=[];
+
+  PlaylistModel({
+    required this.name,
+    required this.playlistsong
+  });
 }
