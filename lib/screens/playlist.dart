@@ -17,7 +17,8 @@ class OtherPage extends StatefulWidget {
 
   const OtherPage({
     Key? key,
-    required this.itemName, required this.id,
+    required this.itemName,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -29,8 +30,7 @@ class _OtherPageState extends State<OtherPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return 
-    Container(
+    return Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -39,92 +39,93 @@ class _OtherPageState extends State<OtherPage> {
               Color.fromARGB(232, 5, 122, 247),
               Color.fromARGB(255, 255, 255, 255)
             ])),
-        child:
-    Scaffold(
-      backgroundColor: Colors.transparent,
-        appBar: AppBar(
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-          actions: [
-            InkWell(
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return addsongplaylist(id: widget.id,);
-                  }));
-                },
-                child: Icon(Icons.add))
-          ],
-          title: Text(widget.itemName,
-          
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            actions: [
+              InkWell(
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return addsongplaylist(
+                        id: widget.id,
+                      );
+                    }));
+                  },
+                  child: Icon(Icons.add))
+            ],
+            title: Text(
+              widget.itemName,
+            ),
           ),
-        ),
-        body: FutureBuilder<List<MusicModel>>(
-          future: getallsongstoPlaylist(widget.id),
-          builder: (context, item) {
-            if (item.data == null) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (item.data!.isEmpty) {
-              return Center(
-                  child: Text(
-                'no song found',
-                style: songstextbalck(),
-              ));
-            }
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      right: screenWidth * 0.04,
-                      left: screenWidth * 0.04,
-                      top: screenHeight * 0.02),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Color.fromARGB(76, 0, 0, 0),
-                    ),
-                    child: ListTile(
-                        onTap: () {
-                          context
-                              .read<songModelprovider>()
-                              .setId(item.data![index].songid);
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return NowPlaying(
-                              songModel: item.data![index],
-                              audioPlayer: audioplayer,
-                              playlist: item.data!,
-                              currentIndex: index,
-                            );
-                          }))..then((value) {
-                            setState(() {
-                              
-                            });
-                          });
-                        },
-                        title: TextScroll(item.data![index].songname),
-                        subtitle: TextScroll('${item.data![index].artrist}'),
-                        leading: QueryArtworkWidget(
-                          id: item.data![index].songid,
-                          type: ArtworkType.AUDIO,
-                          nullArtworkWidget: ClipRRect(
-                            child: Image.asset('asset/the black boy.jpeg'),
-                            borderRadius: BorderRadius.circular(30),
+          body: FutureBuilder<List<MusicModel>>(
+            future: getallsongstoPlaylist(widget.id),
+            builder: (context, item) {
+              if (item.data == null) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (item.data!.isEmpty) {
+                return Center(
+                    child: Text(
+                  'no song found',
+                  style: songstextbalck(),
+                ));
+              }
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        right: screenWidth * 0.04,
+                        left: screenWidth * 0.04,
+                        top: screenHeight * 0.02),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color.fromARGB(76, 0, 0, 0),
+                      ),
+                      child: ListTile(
+                          onTap: () {
+                            context
+                                .read<songModelprovider>()
+                                .setId(item.data![index].songid);
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return NowPlaying(
+                                songModel: item.data![index],
+                                audioPlayer: audioplayer,
+                                playlist: item.data!,
+                                currentIndex: index,
+                              );
+                            }))
+                              ..then((value) {
+                                setState(() {});
+                              });
+                          },
+                          title: TextScroll(item.data![index].songname),
+                          subtitle: TextScroll('${item.data![index].artrist}'),
+                          leading: QueryArtworkWidget(
+                            id: item.data![index].songid,
+                            type: ArtworkType.AUDIO,
+                            nullArtworkWidget: ClipRRect(
+                              child: Image.asset('asset/the black boy.jpeg'),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
                           ),
-                        ),
-                        trailing: InkWell(
-                            onTap: () {
-                              removelikedsong(item.data![index].songid);
-                              iflikedsong();
-                              setState(() {});
-                            },
-                            child: Icon(Icons.favorite))),
-                  ),
-                );
-              },
-              itemCount: item.data!.length,
-            );
-          },
-        ),));
+                          trailing: InkWell(
+                              onTap: () {
+                                removeSongFromPlaylist(
+                                    widget.id, item.data![index].songid);
+                                setState(() {});
+                              },
+                              child: Icon(Icons.close))),
+                    ),
+                  );
+                },
+                itemCount: item.data!.length,
+              );
+            },
+          ),
+        ));
   }
 }

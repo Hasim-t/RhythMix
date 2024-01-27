@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:text_scroll/text_scroll.dart';
 
 class Lyrics extends StatefulWidget {
   final String songName;
@@ -68,6 +70,7 @@ class _LyricsState extends State<Lyrics> {
   void _showLyricsNotFoundSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+
         content: Text('Lyrics not found for ${widget.songName} by ${widget.artistName}'),
         duration: Duration(seconds: 3),
       ),
@@ -76,21 +79,42 @@ class _LyricsState extends State<Lyrics> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Color.fromARGB(232, 5, 122, 247),
+              Color.fromARGB(255, 255, 255, 255)
+            ])),
+        child:Scaffold(
+          backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text('Lyrics'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: loading
-              ? CircularProgressIndicator() 
-              : Text(
-                  lyrics ?? 'Lyrics not found',
-                  style: TextStyle(fontSize: 16),
-                ),
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: Text('Lyrics',
+        style: GoogleFonts.archivo(
+          textStyle: TextStyle(
+            fontSize: 30
+          )
+        ),
         ),
       ),
-    );
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: loading
+                ? CircularProgressIndicator() 
+                : TextScroll(
+                    lyrics ?? 'Lyrics not found',
+                    style: TextStyle(fontSize: 16),
+                  ),
+          ),
+        ),
+      ),
+    ));
   }
+  
 }

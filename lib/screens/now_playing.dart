@@ -3,6 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:marquee_text/marquee_text.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
+import 'package:rhythmix/database/function/db_playlist.dart';
 
 import 'package:rhythmix/database/function/favorite_db.dart';
 import 'package:rhythmix/database/function/functions.dart';
@@ -12,6 +13,9 @@ import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rhythmix/screens/lyrics.dart';
+import 'package:on_audio_query_platform_interface/src/models/playlist_model.dart'
+    as AudioQueryPlaylistModel;
+import 'package:rhythmix/database/model/db_model.dart' as RhythmixPlaylistModel;
 
 class NowPlaying extends StatefulWidget {
   NowPlaying({
@@ -102,9 +106,10 @@ class _NowPlayingState extends State<NowPlaying> {
 
   @override
   Widget build(BuildContext context) {
-    
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+     final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -118,7 +123,7 @@ class _NowPlayingState extends State<NowPlaying> {
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(left: 13, right: 13),
+            padding:  EdgeInsets.only(left: 13, right: 13,bottom:keyboardHeight ),
             child: Column(
               children: [
                 Row(
@@ -164,14 +169,15 @@ class _NowPlayingState extends State<NowPlaying> {
                 //Lyrics
                 TextButton(
                   onPressed: () {
-                   Navigator.of(context).push(
-  MaterialPageRoute(builder: (context) {
-    return Lyrics(songId:widget.songModel.songid, songName: widget.songModel.songname,artistName: widget.songModel.artrist,
-      
-    );
-  }),
-);
-
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return Lyrics(
+                          songId: widget.songModel.songid,
+                          songName: widget.songModel.songname,
+                          artistName: widget.songModel.artrist,
+                        );
+                      }),
+                    );
                   },
                   child: Text(
                     'Lyrics',
@@ -198,7 +204,11 @@ class _NowPlayingState extends State<NowPlaying> {
                               setState(() {});
                             },
                             icon: Icon(Icons.favorite_border_outlined)),
-                            IconButton(onPressed: (){}, icon:Icon(Icons.format_list_bulleted_add))
+                    IconButton(
+                        onPressed: () {
+                          showPlaylistBottomSheet(context, widget.songModel);
+                        },
+                        icon: Icon(Icons.format_list_bulleted_add))
                   ],
                 ),
                 Padding(
@@ -341,6 +351,7 @@ class _NowPlayingState extends State<NowPlaying> {
       });
     } else {}
   }
+
   void shuffleSongs() {
     setState(() {
       _isShuffleMode = !_isShuffleMode;
@@ -360,11 +371,139 @@ class _NowPlayingState extends State<NowPlaying> {
       }
     });
   }
+
   void changedtoseconds(int second) {
     Duration duration = Duration(seconds: second);
     widget.audioPlayer.seek(duration);
   }
+
+  void showPlaylistBottomSheet(BuildContext context, MusicModel song) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return buildPlaylistBottomSheet(context, song);
+      },
+    );
+  }
+
+ Widget buildPlaylistBottomSheet(BuildContext context, MusicModel song) {
+  double screenWidth = MediaQuery.of(context).size.width;
+
+  return SingleChildScrollView(
+    child: Container(
+      padding: EdgeInsets.all(16),
+      constraints: BoxConstraints(
+        minHeight: 200, // Set a minimum height for the container
+        minWidth: screenWidth, // Set a fixed width for the container
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Add to Playlist',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16),
+          FutureBuilder<List<RhythmixPlaylistModel.PlaylistModel>>(
+            future: getallplaylis(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                if (snapshot.data!.isEmpty) {
+                  return Column(
+                    children: [
+                      Text('No playlists available'),
+                      SizedBox(height: 16),
+                      Container(
+                        width: screenWidth, // Set the desired width
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Show an alert dialog to add a new playlist
+                            showAddPlaylistDialog(context, song);
+                          },
+                          child: Text('Add Playlist', style: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      RhythmixPlaylistModel.PlaylistModel playlist = snapshot.data![index];
+                      return ListTile(
+                        title: Text(
+                          playlist.name,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        onTap: () {
+                          addsongsToPlylist1(song, playlist.key);
+                          Navigator.pop(context); // Close the bottom sheet
+                        },
+                      );
+                    },
+                  );
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    ),
+  );
 }
+
+
+  Future<void> showAddPlaylistDialog(
+      BuildContext context, MusicModel song) async {
+    String newPlaylistName = '';
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add New Playlist'),
+          content: TextField(
+            onChanged: (value) {
+              newPlaylistName = value;
+            },
+            decoration: InputDecoration(
+              hintText: 'Enter playlist name',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (newPlaylistName.isNotEmpty) {
+                  await addPlaylistToHive(newPlaylistName, []);
+                  addsongsToPlylist1(song, await getNewPlaylistKey());
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<int> getNewPlaylistKey() async {
+    final playlists = await getallplaylis();
+    return playlists.length > 0 ? playlists.last.key + 1 : 1;
+  }
+}
+
 class Artworkwidget extends StatelessWidget {
   const Artworkwidget({
     Key? key,
@@ -384,5 +523,4 @@ class Artworkwidget extends StatelessWidget {
       ),
     );
   }
-  
 }

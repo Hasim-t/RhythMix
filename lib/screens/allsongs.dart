@@ -79,7 +79,7 @@ class _All_SongsState extends State<All_Songs> {
                               ),
                               trailing: InkWell(
                                   onTap: () {
-                                    bottomsheet(context,item.data![index] );
+                                    // bottomsheet(context,item.data![index] );
                                   },
                                   child: Icon(Icons.more_vert,)),
                             ),

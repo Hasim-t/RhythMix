@@ -162,58 +162,42 @@ class _LibraryState extends State<Library> {
                                         top: 0,
                                         right: 0,
                                         child: // Replace the IconButton with PopupMenuButton
-                                            PopupMenuButton<int>(
-                                          onSelected: (value) {
-                                            // Handle the selected option if needed
-                                            if (value == 1) {
-                                              showDeleteAlertDialog(
-                                                  snapshot.data![index]);
-                                            } else if (value == 2) {
-                                              showEditItemDialog(
-                                                  snapshot.data![index]);
-                                            }
-                                          },
-                                          itemBuilder: (BuildContext context) =>
-                                              [
-                                            PopupMenuItem<int>(
-                                              value: 1,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  showDeleteAlertDialog(
-                                                  snapshot.data![index]);
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.delete),
-                                                    SizedBox(width: 10),
-                                                    Text(
-                                                      "Delete",
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            PopupMenuItem<int>(
-                                              value: 2,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  showEditItemDialog(
-                                                      snapshot.data![index]);
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons
-                                                        .edit_note_rounded),
-                                                    SizedBox(width: 10),
-                                                    Text("Edit"),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                          icon: Icon(Icons.more_vert_rounded,
-                                              color: Colors.white),
-                                        )),
+                                          PopupMenuButton<int>(
+  onSelected: (value) async {
+    // Delay for a short duration to allow the menu to close
+    await Future.delayed(Duration(milliseconds: 50));
+
+    // Handle the selected option if needed
+    if (value == 1) {
+      showDeleteAlertDialog(snapshot.data![index]);
+    } else if (value == 2) {
+      showEditItemDialog(snapshot.data![index]);
+    }
+  },
+  itemBuilder: (BuildContext context) => [
+    PopupMenuItem<int>(
+      value: 1,
+      child: Row(
+        children: [
+          Icon(Icons.delete),
+          SizedBox(width: 10),
+          Text("Delete"),
+        ],
+      ),
+    ),
+    PopupMenuItem<int>(
+      value: 2,
+      child: Row(
+        children: [
+          Icon(Icons.edit_note_rounded),
+          SizedBox(width: 10),
+          Text("Edit"),
+        ],
+      ),
+    ),
+  ],
+  icon: Icon(Icons.more_vert_rounded, color: Colors.white),
+)),
                                     Positioned.fill(
                                       child: Center(
                                         child: Text(
@@ -246,45 +230,45 @@ class _LibraryState extends State<Library> {
   }
 
   Future<void> showAddItemDialog(
-  BuildContext context,
-) async {
-  String newItemName = '';
+    BuildContext context,
+  ) async {
+    String newItemName = '';
 
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Add Playlist'),
-        content: TextField(
-          onChanged: (value) {
-            newItemName = value;
-          },
-          decoration: InputDecoration(
-            hintText: 'Enter playlist name',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add Playlist'),
+          content: TextField(
+            onChanged: (value) {
+              newItemName = value;
             },
-            child: Text('Cancel'),
+            decoration: InputDecoration(
+              hintText: 'Enter playlist name',
+            ),
           ),
-          TextButton(
-            onPressed: () async {
-              if (newItemName.isNotEmpty) {
-                await addPlaylistToHive(newItemName, []);
-                libraryKey.currentState?.setState(() {});
-              }
-              Navigator.pop(context);
-            },
-            child: Text('Add'),
-          ),
-        ],
-      );
-    },
-  );
-}
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (newItemName.isNotEmpty) {
+                  await addPlaylistToHive(newItemName, []);
+                  libraryKey.currentState?.setState(() {});
+                }
+                Navigator.pop(context);
+              },
+              child: Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void navigateToPage(PlaylistModel item) {
     Navigator.of(context).push(MaterialPageRoute(
@@ -346,10 +330,10 @@ class _LibraryState extends State<Library> {
             ),
             TextButton(
               onPressed: () async {
+                showDeleteSnackbar();
                 await deleteplaylist(item.key);
-                Navigator.pop(context); // Close the AlertDialog
-                // Instead of calling setState directly, you might want to use a callback
-                // This ensures that the callback is called after the dialog is closed
+                Navigator.pop(context);
+                setState(() {});
                 _updateGridView();
               },
               child: Text("Delete"),
@@ -411,5 +395,14 @@ class _LibraryState extends State<Library> {
     );
   }
 
- 
+void showDeleteSnackbar() {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      padding: EdgeInsets.all(16),
+      backgroundColor: Colors.blue[200],
+      content: Text('Playlist deleted'),
+    ),
+  );
+}
+
 }
