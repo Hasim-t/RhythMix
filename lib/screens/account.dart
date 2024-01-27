@@ -6,14 +6,14 @@ class Account extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[600],
+      backgroundColor:Color.fromARGB(130, 53, 102, 186),
 
       body: SafeArea(
         child: Column(
         children: [
              Container(
               height: 60,
-              color: const Color.fromARGB(100, 96, 125, 139),
+              color: const Color.fromARGB(130, 53, 102, 186),
               child: Row(
                 children: [
                   Container(
@@ -35,7 +35,7 @@ class Account extends StatelessWidget {
             Divider(color: Colors.black,height: 0),
              Container(
               height: 60,
-              color: const Color.fromARGB(100, 96, 125, 139),
+              color: const Color.fromARGB(130, 53, 102, 186),
               child: Row(
                 children: [
                   Container(
@@ -57,7 +57,7 @@ class Account extends StatelessWidget {
              Divider(color: Colors.black,height: 0),
              Container(
               height: 60,
-              color: const Color.fromARGB(100, 96, 125, 139),
+              color: const Color.fromARGB(130, 53, 102, 186),
               child: Row(
                 children: [
                   Container(
@@ -79,7 +79,7 @@ class Account extends StatelessWidget {
              Divider(color: Colors.black,height: 0),
              Container(
               height: 60,
-              color: const Color.fromARGB(100, 96, 125, 139),
+              color: const Color.fromARGB(130, 53, 102, 186),
               child: Row(
                 children: [
                   Container(
@@ -101,7 +101,7 @@ class Account extends StatelessWidget {
              Divider(color: Colors.black,height: 0),
              Container(
               height: 60,
-              color: const Color.fromARGB(100, 96, 125, 139),
+              color:  Color.fromARGB(130, 53, 102, 186),
               child: Row(
                 children: [
                   Container(

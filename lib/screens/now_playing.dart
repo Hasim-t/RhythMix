@@ -102,6 +102,7 @@ class _NowPlayingState extends State<NowPlaying> {
 
   @override
   Widget build(BuildContext context) {
+    
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -383,4 +384,5 @@ class Artworkwidget extends StatelessWidget {
       ),
     );
   }
+  
 }

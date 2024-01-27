@@ -36,7 +36,7 @@ class Recently extends HiveObject {
 }
 
 @HiveType(typeId: 4) // Use a different typeId for Playlist
-class PlaylistModel {
+class PlaylistModel extends HiveObject {
   @HiveField(0)
   String name;
   @HiveField(1)
