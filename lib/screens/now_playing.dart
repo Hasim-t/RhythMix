@@ -3,7 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:marquee_text/marquee_text.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
-import 'package:rhythmix/database/function/db_playlist.dart';
+
 
 import 'package:rhythmix/database/function/favorite_db.dart';
 import 'package:rhythmix/database/function/functions.dart';
@@ -13,10 +13,9 @@ import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rhythmix/screens/lyrics.dart';
-import 'package:on_audio_query_platform_interface/src/models/playlist_model.dart'
-    as AudioQueryPlaylistModel;
-import 'package:rhythmix/database/model/db_model.dart' as RhythmixPlaylistModel;
 
+
+// ignore: must_be_immutable
 class NowPlaying extends StatefulWidget {
   NowPlaying({
     super.key,
@@ -72,7 +71,7 @@ class _NowPlayingState extends State<NowPlaying> {
       widget.audioPlayer
           .setAudioSource(AudioSource.uri(Uri.parse(widget.songModel.uri)));
 
-      // Set shuffle mode before playing
+
       widget.audioPlayer.setShuffleModeEnabled(_isShuffleMode);
 
       widget.audioPlayer.play();
@@ -252,7 +251,7 @@ class _NowPlayingState extends State<NowPlaying> {
                       iconSize: 32,
                       color: _isRepeatMode
                           ? Colors.blue
-                          : null, // Change color based on repeat mode
+                          : null, 
                     ),
                     IconButton(
                       onPressed: skipToPreviousSong,

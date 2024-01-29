@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythmix/database/function/db_playlist.dart';
-import 'package:rhythmix/database/function/favorite_db.dart';
+
 import 'package:rhythmix/database/function/functions.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
@@ -53,7 +53,8 @@ class _OtherPageState extends State<OtherPage> {
                       );
                     }));
                   },
-                  child: Icon(Icons.add))
+                  child: Icon(Icons.add,size: 35,)),
+                  SizedBox(width: 20,)
             ],
             title: Text(
               widget.itemName,

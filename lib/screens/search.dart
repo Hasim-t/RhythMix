@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythmix/database/function/db_function.dart';
-import 'package:rhythmix/database/function/functions.dart';
+
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:rhythmix/screens/Home.dart';
@@ -101,6 +101,7 @@ class _SearchState extends State<Search> {
                             ),
                             child: ListTile(
                               onTap: () async {
+                                FocusScope.of(context).unfocus();
                                 context
                                     .read<songModelprovider>()
                                     .setId(item.data![index].songid);
@@ -108,7 +109,9 @@ class _SearchState extends State<Search> {
                                   MaterialPageRoute(builder: (context) {
                                     return NowPlaying(
                                       songModel: item.data![index],
-                                      audioPlayer: audioplayer, playlist:item.data!, currentIndex: index,
+                                      audioPlayer: audioplayer,
+                                      playlist: item.data!,
+                                      currentIndex: index,
                                     );
                                   }),
                                 );
