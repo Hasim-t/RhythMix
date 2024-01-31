@@ -132,7 +132,7 @@ void bottomsheet(BuildContext context, MusicModel item) {
               width: screenWidth,
               child: Row(
                 children: [
-                SizedBox(width: 15,),
+                SizedBox(width: 16,),
                   Icon(
                     Icons.share,
                     size: 35,

@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rhythmix/database/function/db_playlist.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/screens/favorite_page.dart';
-import 'package:rhythmix/screens/playlist.dart';
+import 'package:rhythmix/screens/playlists/playlist.dart';
 import 'package:rhythmix/screens/recetly_played.dart';
 
 class Library extends StatefulWidget {
@@ -162,42 +162,47 @@ class _LibraryState extends State<Library> {
                                         top: 0,
                                         right: 0,
                                         child: // Replace the IconButton with PopupMenuButton
-                                          PopupMenuButton<int>(
-  onSelected: (value) async {
-    // Delay for a short duration to allow the menu to close
-    await Future.delayed(Duration(milliseconds: 50));
+                                            PopupMenuButton<int>(
+                                          onSelected: (value) async {
+                                            // Delay for a short duration to allow the menu to close
+                                            await Future.delayed(
+                                                Duration(milliseconds: 50));
 
-    // Handle the selected option if needed
-    if (value == 1) {
-      showDeleteAlertDialog(snapshot.data![index]);
-    } else if (value == 2) {
-      showEditItemDialog(snapshot.data![index]);
-    }
-  },
-  itemBuilder: (BuildContext context) => [
-    PopupMenuItem<int>(
-      value: 1,
-      child: Row(
-        children: [
-          Icon(Icons.delete),
-          SizedBox(width: 10),
-          Text("Delete"),
-        ],
-      ),
-    ),
-    PopupMenuItem<int>(
-      value: 2,
-      child: Row(
-        children: [
-          Icon(Icons.edit_note_rounded),
-          SizedBox(width: 10),
-          Text("Edit"),
-        ],
-      ),
-    ),
-  ],
-  icon: Icon(Icons.more_vert_rounded, color: Colors.white),
-)),
+                                            // Handle the selected option if needed
+                                            if (value == 1) {
+                                              showDeleteAlertDialog(
+                                                  snapshot.data![index]);
+                                            } else if (value == 2) {
+                                              showEditItemDialog(
+                                                  snapshot.data![index]);
+                                            }
+                                          },
+                                          itemBuilder: (BuildContext context) =>
+                                              [
+                                            PopupMenuItem<int>(
+                                              value: 1,
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.delete),
+                                                  SizedBox(width: 10),
+                                                  Text("Delete"),
+                                                ],
+                                              ),
+                                            ),
+                                            PopupMenuItem<int>(
+                                              value: 2,
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.edit_note_rounded),
+                                                  SizedBox(width: 10),
+                                                  Text("Edit"),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                          icon: Icon(Icons.more_vert_rounded,
+                                              color: Colors.white),
+                                        )),
                                     Positioned.fill(
                                       child: Center(
                                         child: Text(
@@ -395,14 +400,13 @@ class _LibraryState extends State<Library> {
     );
   }
 
-void showDeleteSnackbar() {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      padding: EdgeInsets.all(16),
-      backgroundColor: Colors.blue[200],
-      content: Text('Playlist deleted'),
-    ),
-  );
-}
-
+  void showDeleteSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        padding: EdgeInsets.all(16),
+        backgroundColor: Colors.blue[200],
+        content: Text('Playlist deleted'),
+      ),
+    );
+  }
 }

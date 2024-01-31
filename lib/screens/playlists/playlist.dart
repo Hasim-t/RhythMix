@@ -26,6 +26,7 @@ class OtherPage extends StatefulWidget {
 }
 
 class _OtherPageState extends State<OtherPage> {
+  
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -45,16 +46,26 @@ class _OtherPageState extends State<OtherPage> {
             backgroundColor: Colors.transparent,
             actions: [
               InkWell(
-                  onTap: () {
+                  onTap: () async {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
                       return addsongplaylist(
                         id: widget.id,
                       );
-                    }));
+                    }))..then((value) {
+                      setState(() {
+                        
+                      });
+                    });
+                    setState(() {});
                   },
-                  child: Icon(Icons.add,size: 35,)),
-                  SizedBox(width: 20,)
+                  child: Icon(
+                    Icons.add,
+                    size: 35,
+                  )),
+              SizedBox(
+                width: 20,
+              )
             ],
             title: Text(
               widget.itemName,
@@ -99,9 +110,8 @@ class _OtherPageState extends State<OtherPage> {
                                 currentIndex: index,
                               );
                             }))
-                              ..then((value) {
-                                setState(() {});
-                              });
+                            
+                            ;
                           },
                           title: TextScroll(item.data![index].songname),
                           subtitle: TextScroll('${item.data![index].artrist}'),

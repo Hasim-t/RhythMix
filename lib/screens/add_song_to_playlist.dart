@@ -9,6 +9,7 @@ import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
 import 'package:rhythmix/screens/Home.dart';
 import 'package:rhythmix/screens/now_playing.dart';
+
 import 'package:text_scroll/text_scroll.dart';
 
 class addsongplaylist extends StatefulWidget {
@@ -21,7 +22,6 @@ class addsongplaylist extends StatefulWidget {
 
 class _addsongplaylistState extends State<addsongplaylist> {
   @override
- 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -83,11 +83,7 @@ class _addsongplaylistState extends State<addsongplaylist> {
                               playlist: item.data!,
                               currentIndex: index,
                             );
-                          }))..then((value) {
-                            setState(() {
-                              
-                            });
-                          });
+                          }));
                         },
                         title: TextScroll(item.data![index].songname),
                         subtitle: TextScroll('${item.data![index].artrist}'),
@@ -99,9 +95,9 @@ class _addsongplaylistState extends State<addsongplaylist> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        trailing: _buildTrailingButton(item.data![index])
+                        trailing: _buildTrailingButton(item.data![index])),
                   ),
-                ),);
+                );
               },
               itemCount: item.data!.length,
             );
@@ -110,9 +106,10 @@ class _addsongplaylistState extends State<addsongplaylist> {
       ),
     );
   }
-   Widget _buildTrailingButton(MusicModel song) {
+
+  Widget _buildTrailingButton(MusicModel song) {
     return FutureBuilder<bool>(
-      future: ifsongcontian(song, widget.id ),
+      future: ifsongcontian(song, widget.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -125,9 +122,15 @@ class _addsongplaylistState extends State<addsongplaylist> {
         return IconButton(
           onPressed: () async {
             if (songIsInPlaylist) {
-              await removeSongFromPlaylist(widget.id,song.songid);
+              setState(() {
+                
+              });
+              await removeSongFromPlaylist(widget.id, song.songid);
             } else {
-              await addsongsToPlylist1(song,widget.id);
+              setState(() {
+                
+              });
+              await addsongsToPlylist1(song, widget.id);
             }
 
             await getallsongstoPlaylist(widget.id);
@@ -142,5 +145,3 @@ class _addsongplaylistState extends State<addsongplaylist> {
     );
   }
 }
-
-
