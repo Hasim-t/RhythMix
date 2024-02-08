@@ -41,6 +41,7 @@ class _All_SongsState extends State<All_Songs> {
                       return Text('no song found');
                     }
                     return ListView.builder(
+                      physics: BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: EdgeInsets.only(
@@ -79,7 +80,7 @@ class _All_SongsState extends State<All_Songs> {
                               ),
                               trailing: InkWell(
                                   onTap: () {
-                                    // bottomsheet(context,item.data![index] );
+                                    bottomsheet(context,item.data![index] );
                                   },
                                   child: Icon(Icons.more_vert,)),
                             ),

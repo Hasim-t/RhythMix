@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythmix/database/function/db_function.dart';
+import 'package:rhythmix/database/function/functions.dart';
 
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/provider/songprovider.dart';
@@ -83,6 +84,7 @@ class _SearchState extends State<Search> {
                   }
 
                   return ListView.builder(
+                    physics:BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
@@ -130,7 +132,7 @@ class _SearchState extends State<Search> {
                               ),
                               trailing: InkWell(
                                 onTap: () {
-                                  // bottomsheet(context, item.data![index]);
+                                  bottomsheet(context, item.data![index]);
                                 },
                                 child: Icon(
                                   Icons.more_vert,

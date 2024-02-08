@@ -117,7 +117,7 @@ class _HomeState extends State<Home> {
                     return Text('no song found');
                   }
                   return ListView.builder(
-                    
+                    physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(

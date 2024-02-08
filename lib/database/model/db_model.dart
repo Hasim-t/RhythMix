@@ -1,5 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+
 part 'db_model.g.dart';
 
 @HiveType(typeId: 1)
@@ -12,11 +12,17 @@ class MusicModel {
   String artrist;
   @HiveField(3)
   String uri;
-  MusicModel(
-      {required this.artrist,
-      required this.songid,
-      required this.songname,
-      required this.uri});
+ 
+  
+
+  MusicModel({
+    required this.artrist,
+    required this.songid,
+    required this.songname,
+    required this.uri,
+    
+   
+  });
 }
 
 @HiveType(typeId: 2)
@@ -40,10 +46,7 @@ class PlaylistModel extends HiveObject {
   @HiveField(0)
   String name;
   @HiveField(1)
-  List<int> playlistsong=[];
+  List<int> playlistsong = [];
 
-  PlaylistModel({
-    required this.name,
-    required this.playlistsong
-  });
+  PlaylistModel({required this.name, required this.playlistsong});
 }

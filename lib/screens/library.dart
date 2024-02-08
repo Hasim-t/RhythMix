@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rhythmix/database/function/db_playlist.dart';
+import 'package:rhythmix/database/function/functions.dart';
 import 'package:rhythmix/database/model/db_model.dart';
 import 'package:rhythmix/screens/favorite_page.dart';
 import 'package:rhythmix/screens/playlists/playlist.dart';
@@ -60,12 +61,7 @@ class _LibraryState extends State<Library> {
                   },
                   title: Text(
                     'Favorite',
-                    style: GoogleFonts.dancingScript(
-                      textStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
+                    style:dancing()
                   ),
                   leading: Icon(
                     Icons.favorite,
@@ -89,12 +85,7 @@ class _LibraryState extends State<Library> {
                   },
                   title: Text(
                     'Recently Played',
-                    style: GoogleFonts.dancingScript(
-                      textStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
+                    style:dancing()
                   ),
                   leading: Icon(
                     Icons.access_time,
@@ -122,6 +113,7 @@ class _LibraryState extends State<Library> {
                               [];
 
                       return GridView.builder(
+                        physics: BouncingScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 8.0,

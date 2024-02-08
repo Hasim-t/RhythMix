@@ -98,13 +98,26 @@ class _FavoritePageState extends State<FavoritePage> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        trailing: InkWell(
-                            onTap: () {
-                              removelikedsong(item.data![index].songid);
-                              iflikedsong();
-                              setState(() {});
-                            },
-                            child: Icon(Icons.favorite))),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          
+                          children: [
+                            InkWell(
+                                onTap: () {
+                                  removelikedsong(item.data![index].songid);
+                                  iflikedsong();
+                                  setState(() {});
+                                },
+                                child: Icon(Icons.favorite)),
+                              SizedBox(width: 10),
+                                InkWell(
+                                  onTap: () {
+                                    bottomsheet(context,item.data![index]);
+                                    
+                                  },
+                                  child: Icon(Icons.more_vert))
+                          ],
+                        )),
                   ),
                 );
               },

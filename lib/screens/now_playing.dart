@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:marquee_text/marquee_text.dart';
@@ -103,6 +105,24 @@ class _NowPlayingState extends State<NowPlaying> {
     });
   }
 
+  Future<bool> checkLyricsAvailability() async {
+  final apiKey = '9e01bdb166e06b520fd08397ee762ca0';
+  final searchUrl =
+      'https://api.musixmatch.com/ws/1.1/track.search?q_track=${widget.songModel.songname}&q_artist=${widget.songModel.artrist}&apikey=$apiKey';
+
+  final searchResponse = await http.get(Uri.parse(searchUrl));
+
+  if (searchResponse.statusCode == 200) {
+    final searchJson = json.decode(searchResponse.body);
+    final trackList = searchJson['message']['body']['track_list'] as List;
+
+    return trackList.isNotEmpty;
+  }
+
+  return false;
+}
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -166,25 +186,37 @@ class _NowPlayingState extends State<NowPlaying> {
                   height: screenHeight * 0.0,
                 ),
                 //Lyrics
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return Lyrics(
-                          songId: widget.songModel.songid,
-                          songName: widget.songModel.songname,
-                          artistName: widget.songModel.artrist,
-                        );
-                      }),
-                    );
-                  },
-                  child: Text(
-                    'Lyrics',
-                    style: GoogleFonts.archivo(
-                      textStyle: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
+              TextButton(
+  onPressed: () async {
+    // Check if lyrics are available
+    bool hasLyrics = await checkLyricsAvailability();
+
+    if (hasLyrics) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) {
+          return Lyrics(
+            songName: widget.songModel.songname,
+            artistName: widget.songModel.artrist, songId: widget.songModel.songid,
+          );
+        }),
+      );
+    } else {
+      // Show Snackbar if lyrics are not available
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Lyrics not available for this song.'),
+        ),
+      );
+    }
+  },
+  child: Text(
+    'Lyrics',
+    style: GoogleFonts.archivo(
+      textStyle: TextStyle(color: Colors.white),
+    ),
+  ),
+),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

@@ -1,16 +1,22 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rhythmix/database/function/db_playlist.dart';
 import 'package:rhythmix/database/function/favorite_db.dart';
 import 'package:rhythmix/database/model/db_model.dart';
-import 'package:on_audio_query_platform_interface/src/models/playlist_model.dart'
-    as AudioQueryPlaylistModel;
+
 import 'package:rhythmix/database/model/db_model.dart' as RhythmixPlaylistModel;
+import 'package:share_plus/share_plus.dart';
 
 TextStyle songstext() {
   return GoogleFonts.archivo(
       textStyle: TextStyle(fontSize: 23, color: Colors.white));
+}
+
+TextStyle dancing() {
+  return GoogleFonts.dancingScript(
+      textStyle: TextStyle(fontSize: 20, color: Colors.white));
 }
 
 TextStyle songstextbalck() {
@@ -33,7 +39,7 @@ void bottomsheet(BuildContext context, MusicModel item) {
       context,
     ) {
       return Container(
-        height: screenHeight * 0.285,
+        height: screenHeight * 0.200,
         width: screenWidth,
         color: Colors.transparent,
         child: Column(
@@ -52,7 +58,6 @@ void bottomsheet(BuildContext context, MusicModel item) {
                         width: screenWidth,
                         child: Row(
                           children: [
-                            
                             Icon(
                               Icons.favorite,
                               size: 35,
@@ -81,7 +86,9 @@ void bottomsheet(BuildContext context, MusicModel item) {
                       width: screenWidth,
                       child: Row(
                         children: [
-  SizedBox(width: 20,),
+                          SizedBox(
+                            width: 20,
+                          ),
                           Icon(
                             Icons.favorite,
                             size: 35,
@@ -101,7 +108,6 @@ void bottomsheet(BuildContext context, MusicModel item) {
             Divider(),
             InkWell(
               onTap: () async {
-                
                 showPlaylistBottomSheet(context, item);
               },
               child: Container(
@@ -109,7 +115,9 @@ void bottomsheet(BuildContext context, MusicModel item) {
                 width: screenWidth,
                 child: Row(
                   children: [
-                    SizedBox(width: 15,),
+                    SizedBox(
+                      width: 15,
+                    ),
                     Icon(
                       Icons.add,
                       size: 50,
@@ -127,27 +135,7 @@ void bottomsheet(BuildContext context, MusicModel item) {
               ),
             ),
             Divider(),
-            Container(
-              height: screenHeight * 0.08,
-              width: screenWidth,
-              child: Row(
-                children: [
-                SizedBox(width: 16,),
-                  Icon(
-                    Icons.share,
-                    size: 35,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    width: screenWidth * 0.09,
-                  ),
-                  Text(
-                    'Share',
-                    style: songstextbalck(),
-                  )
-                ],
-              ),
-            ),
+           
           ],
         ),
       );
@@ -196,10 +184,9 @@ Widget buildPlaylistBottomSheet(BuildContext context, MusicModel song) {
                       Text('No playlists available'),
                       SizedBox(height: 16),
                       Container(
-                        width: screenWidth, // Set the desired width
+                        width: screenWidth,
                         child: ElevatedButton(
                           onPressed: () {
-                            // Show an alert dialog to add a new playlist
                             showAddPlaylistDialog(context, song);
                           },
                           child: Text('Add Playlist',
@@ -281,3 +268,5 @@ Future<int> getNewPlaylistKey() async {
   final playlists = await getallplaylis();
   return playlists.length > 0 ? playlists.last.key + 1 : 1;
 }
+
+

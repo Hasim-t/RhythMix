@@ -13,7 +13,10 @@ Future<void> addSongToDb({required List<SongModel> songs}) async {
         artrist: m.artist.toString(),
         songid: m.id,
         songname: m.title,
-        uri: m.uri.toString(),
+        uri: m.uri.toString(), 
+        
+        
+        
       ));
     }
   }

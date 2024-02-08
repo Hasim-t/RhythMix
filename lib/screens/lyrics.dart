@@ -2,14 +2,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:text_scroll/text_scroll.dart';
+import 'package:rhythmix/database/function/functions.dart';
+
 
 class Lyrics extends StatefulWidget {
   final String songName;
-  final String artistName;
+  final String artistName;  
 
-  const Lyrics({Key? key, required this.songName, required this.artistName, required int songId})
-      : super(key: key);
+  const Lyrics({
+    Key? key,
+    required this.songName,
+    required this.artistName,
+    required int songId,
+  }) : super(key: key);
 
   @override
   _LyricsState createState() => _LyricsState();
@@ -51,70 +56,58 @@ class _LyricsState extends State<Lyrics> {
           setState(() {
             lyrics = lyricsText;
           });
-        } else {
-          _showLyricsNotFoundSnackBar();
         }
-      } else {
-        _showLyricsNotFoundSnackBar();
       }
-    } else {
-      _showLyricsNotFoundSnackBar();
     }
 
-    // Hide the loading indicator after fetching
+    
     setState(() {
       loading = false;
     });
   }
-
-  void _showLyricsNotFoundSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-
-        content: Text('Lyrics not found for ${widget.songName} by ${widget.artistName}'),
-        duration: Duration(seconds: 3),
+@override
+Widget build(BuildContext context) {
+  return Container(
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Color.fromARGB(232, 5, 122, 247),
+          Color.fromARGB(255, 255, 255, 255),
+        ],
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return  Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-              Color.fromARGB(232, 5, 122, 247),
-              Color.fromARGB(255, 255, 255, 255)
-            ])),
-        child:Scaffold(
-          backgroundColor: Colors.transparent,
+    ),
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: Text('Lyrics',
-        style: GoogleFonts.archivo(
-          textStyle: TextStyle(
-            fontSize: 30
-          )
-        ),
+        title: Text(
+          'Lyrics',
+          style: GoogleFonts.archivo(
+            textStyle: TextStyle(fontSize: 30),
+          ),
         ),
       ),
       body: SingleChildScrollView(
+
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: loading
-                ? CircularProgressIndicator() 
-                : TextScroll(
+                ? CircularProgressIndicator()
+                : Text(
                     lyrics ?? 'Lyrics not found',
-                    style: TextStyle(fontSize: 16),
+                    style: songstextbalck(),
+                    textAlign: TextAlign.center,
                   ),
           ),
         ),
       ),
-    ));
-  }
-  
+    ),
+  );
+}
+
 }
